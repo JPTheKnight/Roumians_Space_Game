@@ -1,0 +1,552 @@
+fileFormatVersion: 2
+guid: 438f693e86cf19146a775b4fe226193d
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 623355406639310440
+    second: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_0
+  - first:
+      213: -5594604605695972900
+    second: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_1
+  - first:
+      213: -3122598862568128332
+    second: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_2
+  - first:
+      213: -5795805487674812729
+    second: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_3
+  - first:
+      213: 1324823601171168153
+    second: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_4
+  - first:
+      213: -2295342379919617867
+    second: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_5
+  - first:
+      213: -9135083617279788358
+    second: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_6
+  - first:
+      213: 3537228562166510866
+    second: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_7
+  - first:
+      213: -6603972388485206448
+    second: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_8
+  - first:
+      213: -6531000924374478217
+    second: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_9
+  - first:
+      213: 6229847526837085096
+    second: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_10
+  - first:
+      213: 6679218273094094415
+    second: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_11
+  - first:
+      213: 5551581583199845684
+    second: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_12
+  - first:
+      213: -8299535380227163660
+    second: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_13
+  - first:
+      213: 5603637457741774143
+    second: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_14
+  - first:
+      213: -3360671810741066403
+    second: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_15
+  - first:
+      213: 7599699845053669873
+    second: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_16
+  - first:
+      213: 4905747217697660416
+    second: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_17
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_0
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 398
+        width: 15
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8662e8d807a96a800800000000000000
+      internalID: 623355406639310440
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_1
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 372
+        width: 26
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cd92abaa0c8fb52b0800000000000000
+      internalID: -5594604605695972900
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_2
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 340
+        width: 39
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4b08694f0ec4aa4d0800000000000000
+      internalID: -3122598862568128332
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_3
+      rect:
+        serializedVersion: 2
+        x: 199
+        y: 323
+        width: 50
+        height: 109
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c612efcd99219fa0800000000000000
+      internalID: -5795805487674812729
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_4
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 306
+        width: 58
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 99b7cd9cb08b26210800000000000000
+      internalID: 1324823601171168153
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_5
+      rect:
+        serializedVersion: 2
+        x: 313
+        y: 305
+        width: 51
+        height: 127
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5b0ddf6444e4520e0800000000000000
+      internalID: -2295342379919617867
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_6
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 174
+        width: 51
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aba3c8e89d9a93180800000000000000
+      internalID: -9135083617279788358
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_7
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 176
+        width: 58
+        height: 125
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 215fc41e2a2c61130800000000000000
+      internalID: 3537228562166510866
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_8
+      rect:
+        serializedVersion: 2
+        x: 141
+        y: 192
+        width: 51
+        height: 109
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 05ee9dd1a1af954a0800000000000000
+      internalID: -6603972388485206448
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_9
+      rect:
+        serializedVersion: 2
+        x: 204
+        y: 209
+        width: 39
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 77259e213493d55a0800000000000000
+      internalID: -6531000924374478217
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_10
+      rect:
+        serializedVersion: 2
+        x: 268
+        y: 241
+        width: 26
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8a368f9815dd47650800000000000000
+      internalID: 6229847526837085096
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_11
+      rect:
+        serializedVersion: 2
+        x: 331
+        y: 268
+        width: 15
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f4e4211a1a951bc50800000000000000
+      internalID: 6679218273094094415
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_12
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 43
+        width: 51
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 43d3a30590e2b0d40800000000000000
+      internalID: 5551581583199845684
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_13
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 47
+        width: 58
+        height: 125
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4f9f5c46b8022dc80800000000000000
+      internalID: -8299535380227163660
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_14
+      rect:
+        serializedVersion: 2
+        x: 141
+        y: 62
+        width: 51
+        height: 109
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f3d75c6149e14cd40800000000000000
+      internalID: 5603637457741774143
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_15
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 46
+        width: 58
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d552c123bce7c51d0800000000000000
+      internalID: -3360671810741066403
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_16
+      rect:
+        serializedVersion: 2
+        x: 255
+        y: 46
+        width: 51
+        height: 125
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f1e3008ebe877960800000000000000
+      internalID: 7599699845053669873
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Retrorocket1o4v1e3i2c8s3f516z-removebg-preview_17
+      rect:
+        serializedVersion: 2
+        x: 310
+        y: 44
+        width: 57
+        height: 127
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 00edabc4a17b41440800000000000000
+      internalID: 4905747217697660416
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

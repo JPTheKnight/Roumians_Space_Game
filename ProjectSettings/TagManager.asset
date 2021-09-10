@@ -10,6 +10,9 @@ TagManager:
   - Instructions
   - Instructions2
   - Tanks
+  - Scanner
+  - Vitamin
+  - BluePills
   layers:
   - Default
   - TransparentFX

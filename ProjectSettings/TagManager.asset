@@ -13,6 +13,9 @@ TagManager:
   - Scanner
   - Vitamin
   - BluePills
+  - Littlegem
+  - Treadmill
+  - InsertCode
   layers:
   - Default
   - TransparentFX

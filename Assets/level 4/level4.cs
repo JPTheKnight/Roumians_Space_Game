@@ -258,6 +258,7 @@ public class level4 : MonoBehaviour
             }
 
             numsWinsCanvas[1].SetActive(true);
+            FindObjectOfType<characterMovement>().testNumbers();
         }
 
         //A: 2 and 4 |B: 1| C: 0| D: 3
@@ -298,6 +299,7 @@ public class level4 : MonoBehaviour
                 && !D[0] && !D[1] && D[2] && !D[3])
             {
                 numsWinsCanvas[2].SetActive(true);
+                FindObjectOfType<characterMovement>().testNumbers();
             }
             else
             {

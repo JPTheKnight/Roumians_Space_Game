@@ -4,5 +4,6 @@ using UnityEngine;
 
 public class level5 : MonoBehaviour
 {
-    //-16.855 1.754
+    [HideInInspector]
+    public bool[] winningThings = { false, false, false, false };
 }

@@ -1,29 +1,42 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class characterMovement : MonoBehaviour
 {
     public float speed;
     public float speedAscending;
     public GameObject instructionsPanel, instructionsPanel2;
-    public GameObject[] plantsMaafnin;
 
+    public GameObject[] plantsMaafnin;
     public Animator[] plants;
+    public GameObject[] plantsGlow;
+
+    public GameObject inputCodeSquare;
+    public GameObject inputCodePanel;
+    public GameObject littleInfoWon;
+    public TextMeshProUGUI[] codeTexts;
+    int[] codeNumbers = { 0, 0, 0 };
+
     bool[] plantsChosen = { false, false, false, false };
     bool[] plantsDone = { false, false, false, false };
-    bool wonPlants = false;
     bool grounded = false;
+
+    bool insertCode = false;
+    bool fixedForCode = false;
 
     void Start()
     {
         
     }
 
+    int codeID = 0;
+
     void Update()
     {
 
-        if (!FindObjectOfType<level4>().lost && FindObjectOfType<level4>().beginLevel)
+        if (!FindObjectOfType<level4>().lost && FindObjectOfType<level4>().beginLevel && !fixedForCode)
         {
             if (transform.position.y > Camera.main.transform.position.y && Camera.main.transform.position.y < 0.84f)
             {
@@ -78,6 +91,11 @@ public class characterMovement : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Return) || Input.GetMouseButtonDown(0))
             {
+                for (int i = 0; i < plantsGlow.Length; i++)
+                {
+                    plantsGlow[i].SetActive(false);
+                }
+
                 for (int i = 0; i < 4; i++)
                 {
                     if (plantsChosen[i])
@@ -94,6 +112,7 @@ public class characterMovement : MonoBehaviour
                         plants[i].transform.GetChild(0).GetComponent<Animator>().enabled = true;
                         plantsDone[i] = true;
                         plants[i].enabled = true;
+                        plants[i].GetComponent<BoxCollider2D>().enabled = false;
                         if (plants[i].transform.position.x > transform.position.x)
                         {
                             plants[i].transform.GetChild(1).gameObject.SetActive(true);
@@ -112,7 +131,56 @@ public class characterMovement : MonoBehaviour
         if (plantsDone[3])
         {
             FindObjectOfType<level4>().numsWinsCanvas[0].SetActive(true);
+            testNumbers();
         }
+
+        if (insertCode && Input.GetKeyDown(KeyCode.Return))
+        {
+            inputCodePanel.SetActive(true);
+            fixedForCode = true;
+        }
+
+        if (fixedForCode && codeID < 3)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha0) || Input.GetKeyDown(KeyCode.Keypad0)) { codeTexts[codeID].text = "0"; codeNumbers[codeID] = 0; codeID++; }
+            if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1)) { codeTexts[codeID].text = "1"; codeNumbers[codeID] = 1; codeID++; }
+            if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2)) { codeTexts[codeID].text = "2"; codeNumbers[codeID] = 2; codeID++; }
+            if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3)) { codeTexts[codeID].text = "3"; codeNumbers[codeID] = 3; codeID++; }
+            if (Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.Keypad4)) { codeTexts[codeID].text = "4"; codeNumbers[codeID] = 4; codeID++; }
+            if (Input.GetKeyDown(KeyCode.Alpha5) || Input.GetKeyDown(KeyCode.Keypad5)) { codeTexts[codeID].text = "5"; codeNumbers[codeID] = 5; codeID++; }
+            if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.Keypad6)) { codeTexts[codeID].text = "6"; codeNumbers[codeID] = 6; codeID++; }
+            if (Input.GetKeyDown(KeyCode.Alpha7) || Input.GetKeyDown(KeyCode.Keypad7)) { codeTexts[codeID].text = "7"; codeNumbers[codeID] = 7; codeID++; }
+            if (Input.GetKeyDown(KeyCode.Alpha8) || Input.GetKeyDown(KeyCode.Keypad8)) { codeTexts[codeID].text = "8"; codeNumbers[codeID] = 8; codeID++; }
+            if (Input.GetKeyDown(KeyCode.Alpha9) || Input.GetKeyDown(KeyCode.Keypad9)) { codeTexts[codeID].text = "9"; codeNumbers[codeID] = 9; codeID++; }
+
+        }
+
+        if (codeID == 3)
+        {
+            if (codeNumbers[0] == 9 && codeNumbers[1] == 6 && codeNumbers[2] == 1)
+            {
+                inputCodeSquare.GetComponent<SpriteRenderer>().color = Color.green;
+                inputCodePanel.SetActive(false);
+                littleInfoWon.SetActive(true);
+            }
+            else
+            {
+                Camera.main.GetComponent<level4>().lost = true;
+            }
+        }
+    }
+
+    public void testNumbers()
+    {
+        for (int i = 0; i < Camera.main.GetComponent<level4>().numsWinsCanvas.Length; i++)
+        {
+            if (!Camera.main.GetComponent<level4>().numsWinsCanvas[i].activeInHierarchy)
+            {
+                return;
+            }
+        }
+
+        inputCodeSquare.SetActive(true);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -141,21 +209,30 @@ public class characterMovement : MonoBehaviour
         if (collision.gameObject.name == "rosePlant")
         {
             plantsChosen[1] = true;
+            plantsGlow[1].SetActive(true);
         }
 
         if (collision.gameObject.name == "redPlant")
         {
             plantsChosen[0] = true;
+            plantsGlow[0].SetActive(true);
         }
 
         if (collision.gameObject.name == "yellowPlant")
         {
             plantsChosen[2] = true;
+            plantsGlow[2].SetActive(true);
         }
 
         if (collision.gameObject.name == "bluePlant")
         {
             plantsChosen[3] = true;
+            plantsGlow[3].SetActive(true);
+        }
+
+        if (collision.gameObject.tag == "InsertCode")
+        {
+            insertCode = true;
         }
     }
 
@@ -185,21 +262,30 @@ public class characterMovement : MonoBehaviour
         if (collision.gameObject.name == "rosePlant")
         {
             plantsChosen[1] = false;
+            plantsGlow[1].SetActive(false);
         }
 
         if (collision.gameObject.name == "redPlant")
         {
             plantsChosen[0] = false;
+            plantsGlow[0].SetActive(false);
         }
 
         if (collision.gameObject.name == "yellowPlant")
         {
             plantsChosen[2] = false;
+            plantsGlow[2].SetActive(false);
         }
 
         if (collision.gameObject.name == "bluePlant")
         {
+            plantsGlow[3].SetActive(false);
             plantsChosen[3] = false;
+        }
+
+        if (collision.gameObject.tag == "InsertCode")
+        {
+            insertCode = false;
         }
     }
 }

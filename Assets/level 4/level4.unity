@@ -2153,7 +2153,6 @@ MonoBehaviour:
   - {fileID: 489891069}
   inputCodeSquare: {fileID: 1028668423}
   inputCodePanel: {fileID: 544004889}
-  littleInfoWon: {fileID: 1658151343}
   codeTexts:
   - {fileID: 373422856}
   - {fileID: 1607197951}
@@ -12615,7 +12614,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1658151344
 RectTransform:
   m_ObjectHideFlags: 0

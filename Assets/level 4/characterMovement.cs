@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class characterMovement : MonoBehaviour
 {
@@ -166,6 +167,7 @@ public class characterMovement : MonoBehaviour
             else
             {
                 Camera.main.GetComponent<level4>().lost = true;
+                FindObjectOfType<level4>().lostPanel.GetComponent<Image>().sprite = FindObjectOfType<level4>().lostMessage[1];
             }
         }
     }

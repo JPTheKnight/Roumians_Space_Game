@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class level4 : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class level4 : MonoBehaviour
     public GameObject[] wrongLines;
     public Animator fade;
     public GameObject[] numsWinsCanvas;
+    public GameObject lostPanel;
+    public Sprite[] lostMessage;
 
     public GameObject instructionsPanel;
     [HideInInspector]
@@ -37,6 +40,7 @@ public class level4 : MonoBehaviour
     {
         if (lost)
         {
+            lostPanel.SetActive(true);
             FindObjectOfType<characterMovement>().GetComponent<Animator>().SetBool("dying", true);
             fade.gameObject.SetActive(true);
             fade.Play("fadeInAnim");
@@ -100,6 +104,7 @@ public class level4 : MonoBehaviour
                             {
                                 hit.collider.transform.GetChild(0).gameObject.SetActive(false);
                                 lost = true;
+                                lostPanel.GetComponent<Image>().sprite = lostMessage[1];
                                 Debug.Log("Lost");
                             }
                             break;
@@ -119,6 +124,7 @@ public class level4 : MonoBehaviour
                             {
                                 hit.collider.transform.GetChild(0).gameObject.SetActive(false);
                                 lost = true;
+                                lostPanel.GetComponent<Image>().sprite = lostMessage[1];
                                 Debug.Log("Lost");
                             }
                             break;
@@ -138,6 +144,7 @@ public class level4 : MonoBehaviour
                             {
                                 hit.collider.transform.GetChild(0).gameObject.SetActive(false);
                                 lost = true;
+                                lostPanel.GetComponent<Image>().sprite = lostMessage[1];
                                 Debug.Log("Lost");
                             }
                             break;
@@ -157,6 +164,7 @@ public class level4 : MonoBehaviour
                             {
                                 hit.collider.transform.GetChild(0).gameObject.SetActive(false);
                                 lost = true;
+                                lostPanel.GetComponent<Image>().sprite = lostMessage[1];
                                 Debug.Log("Lost");
                             }
                             break;
@@ -176,6 +184,7 @@ public class level4 : MonoBehaviour
                             {
                                 hit.collider.transform.GetChild(0).gameObject.SetActive(false);
                                 lost = true;
+                                lostPanel.GetComponent<Image>().sprite = lostMessage[1];
                                 Debug.Log("Lost");
                             }
                             break;
@@ -195,6 +204,7 @@ public class level4 : MonoBehaviour
                             {
                                 hit.collider.transform.GetChild(0).gameObject.SetActive(false);
                                 lost = true;
+                                lostPanel.GetComponent<Image>().sprite = lostMessage[1];
                                 Debug.Log("Lost");
                             }
                             break;
@@ -214,6 +224,7 @@ public class level4 : MonoBehaviour
                             {
                                 hit.collider.transform.GetChild(0).gameObject.SetActive(false);
                                 lost = true;
+                                lostPanel.GetComponent<Image>().sprite = lostMessage[1];
                                 Debug.Log("Lost");
                             }
                             break;
@@ -233,6 +244,7 @@ public class level4 : MonoBehaviour
                             {
                                 hit.collider.transform.GetChild(0).gameObject.SetActive(false);
                                 lost = true;
+                                lostPanel.GetComponent<Image>().sprite = lostMessage[1];
                                 Debug.Log("Lost");
                             }
                             break;
@@ -304,6 +316,7 @@ public class level4 : MonoBehaviour
             else
             {
                 lost = true;
+                lostPanel.GetComponent<Image>().sprite = lostMessage[2];
             }
            
         }

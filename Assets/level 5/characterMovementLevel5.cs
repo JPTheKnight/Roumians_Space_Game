@@ -13,14 +13,16 @@ public class characterMovementLevel5 : MonoBehaviour
     public Sprite scannedPhoto, xray_explanation;
     public GameObject greenBar;
     public GameObject scannedBones;
-    public GameObject vitamin;
+    public GameObject vitamin, bluePills;
+    public GameObject TV, TVPanel;
 
     bool fixCamera = false;
     bool grounded = false;
     bool scanning = false;
-    bool onVitamin = false;
+    bool onVitamin = false, onBluePills = false;
     bool xray = false, solution = false;
     bool lgem = false;
+    bool tv = false;
 
     float runningTime = 10f;
 
@@ -33,7 +35,7 @@ public class characterMovementLevel5 : MonoBehaviour
     {
         transform.GetChild(0).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "00:" + runningTime.ToString("00");
 
-        if (/*!FindObjectOfType<level5>().lost && FindObjectOfType<level4>().beginLevel && */!scanning && !xray)
+        if (!FindObjectOfType<level5>().lost && FindObjectOfType<level5>().beginLevel && !scanning && !xray)
         {
             if (!fixCamera)
             {
@@ -62,6 +64,7 @@ public class characterMovementLevel5 : MonoBehaviour
             {
                 transform.Translate(Vector2.right * speed * Time.deltaTime);
                 transform.rotation = new Quaternion(0, 0, 0, 1);
+                transform.GetChild(0).rotation = new Quaternion(0, 0, 0, 1);
                 GetComponent<Animator>().SetBool("running", true);
             }
             else if (Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.D))
@@ -73,6 +76,7 @@ public class characterMovementLevel5 : MonoBehaviour
             {
                 transform.Translate(Vector2.right * speed * Time.deltaTime);
                 transform.rotation = new Quaternion(0, 180f, 0, 1);
+                transform.GetChild(0).rotation = new Quaternion(0, 0, 0, 1);
                 GetComponent<Animator>().SetBool("running", true);
             }
             else if (Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.A))
@@ -91,7 +95,21 @@ public class characterMovementLevel5 : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Return))
             {
+                Camera.main.GetComponent<level5>().winningThings[1] = true;
                 Destroy(vitamin);
+            }
+        }
+
+        if (onBluePills)
+        {
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                Destroy(bluePills);
+                FindObjectOfType<level5>().sunShown1 = false;
+                FindObjectOfType<level5>().sunShown2 = false;
+                FindObjectOfType<level5>().hitBySun = false;
+                FindObjectOfType<level5>().firstSun = true;
+                FindObjectOfType<level5>().resetSunTime();
             }
         }
 
@@ -102,14 +120,28 @@ public class characterMovementLevel5 : MonoBehaviour
             xray = false;
         }
 
+        if ((FindObjectOfType<level5>().sunShown1 && transform.position.x > 10.53f) || 
+            (FindObjectOfType<level5>().sunShown2 && transform.position.x > -7.40565f && transform.position.x < 7.888f))
+        {
+            FindObjectOfType<level5>().hitBySun = true;
+            Debug.Log("Gi");
+        }
+
         if (lgem && Input.GetKeyDown(KeyCode.Space))
         {
             little_gem.SetActive(false);
             lgem = false;
         }
+
+        if (tv && Input.GetKeyDown(KeyCode.Return))
+        {
+            TVPanel.SetActive(true);
+            tvCollisionSaved.enabled = false;
+        }
+
     }
 
-    Collider2D collisionSaved;
+    Collider2D collisionSaved, tvCollisionSaved;
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Ground" && grounded == false)
@@ -153,10 +185,23 @@ public class characterMovementLevel5 : MonoBehaviour
             vitamin.transform.GetChild(0).gameObject.SetActive(true);
         }
 
+        if (collision.gameObject.tag == "BluePills")
+        {
+            onBluePills = true;
+            bluePills.transform.GetChild(0).gameObject.SetActive(true);
+        }
+
         if (collision.gameObject.tag == "Littlegem")
         {
             little_gem.SetActive(true);
             lgem = true;
+        }
+
+        if (collision.gameObject.tag == "TV")
+        {
+            tv = true;
+            TV.transform.GetChild(0).gameObject.SetActive(true);
+            tvCollisionSaved = collision;
         }
     }
 
@@ -215,13 +260,24 @@ public class characterMovementLevel5 : MonoBehaviour
         if (collision.gameObject.tag == "Vitamin")
         {
             onVitamin = false;
-            Camera.main.GetComponent<level5>().winningThings[1] = true;
             vitamin.transform.GetChild(0).gameObject.SetActive(false);
+        }
+
+        if (collision.gameObject.tag == "BluePills")
+        {
+            onBluePills = false;
+            bluePills.transform.GetChild(0).gameObject.SetActive(false);
         }
 
         if (collision.gameObject.tag == "Treadmill")
         {
             fixCamera = false;
+        }
+
+        if (collision.gameObject.tag == "TV")
+        {
+            tv = false;
+            TV.transform.GetChild(0).gameObject.SetActive(false);
         }
     }
 

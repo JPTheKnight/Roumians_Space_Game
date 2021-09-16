@@ -17,6 +17,12 @@ TagManager:
   - Treadmill
   - InsertCode
   - TV
+  - RadarDish
+  - Rover
+  - Rock
+  - Microscope
+  - O2Tank
+  - Doctor
   layers:
   - Default
   - TransparentFX

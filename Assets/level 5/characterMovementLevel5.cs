@@ -15,6 +15,7 @@ public class characterMovementLevel5 : MonoBehaviour
     public GameObject scannedBones;
     public GameObject vitamin, bluePills;
     public GameObject TV, TVPanel;
+    public GameObject SunMsg;
 
     bool fixCamera = false;
     bool grounded = false;
@@ -23,6 +24,7 @@ public class characterMovementLevel5 : MonoBehaviour
     bool xray = false, solution = false;
     bool lgem = false;
     bool tv = false;
+    bool sunMsg = false;
 
     float runningTime = 10f;
 
@@ -35,7 +37,7 @@ public class characterMovementLevel5 : MonoBehaviour
     {
         transform.GetChild(0).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "00:" + runningTime.ToString("00");
 
-        if (!FindObjectOfType<level5>().lost && FindObjectOfType<level5>().beginLevel && !scanning && !xray)
+        if (!FindObjectOfType<level5>().lost && FindObjectOfType<level5>().beginLevel && !scanning && !xray && !SunMsg.activeInHierarchy)
         {
             if (!fixCamera)
             {
@@ -116,6 +118,7 @@ public class characterMovementLevel5 : MonoBehaviour
         if (xray && Input.GetKeyDown(KeyCode.Space))
         {
             xray_result.GetComponent<Image>().sprite = xray_explanation;
+            xray_result.transform.GetChild(1).gameObject.SetActive(true);
             xray_result.transform.GetChild(0).gameObject.SetActive(false);
             xray = false;
         }
@@ -139,6 +142,11 @@ public class characterMovementLevel5 : MonoBehaviour
             tvCollisionSaved.enabled = false;
         }
 
+        if (SunMsg.activeInHierarchy && Input.GetKeyDown(KeyCode.Space))
+        {
+            SunMsg.SetActive(false);
+        }
+
     }
 
     Collider2D collisionSaved, tvCollisionSaved;
@@ -153,6 +161,12 @@ public class characterMovementLevel5 : MonoBehaviour
         if (collision.gameObject.tag == "Door")
         {
             collision.gameObject.transform.parent.GetChild(0).GetComponent<Animator>().SetBool("on", true);
+
+            if (!sunMsg)
+            {
+                sunMsg = true;
+                SunMsg.SetActive(true);
+            }
         }
 
         if (collision.gameObject.tag == "Instructions")

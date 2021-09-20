@@ -14,6 +14,8 @@ public class level2 : MonoBehaviour
     public Slider fuelSlider;
     public GameObject chooseFuelBG;
     public GameObject Fade;
+    public GameObject tooExpensive;
+    public TextMeshProUGUI countdown;
 
     public float shipSpace;
     public float rotationSpeed;
@@ -38,7 +40,7 @@ public class level2 : MonoBehaviour
     bool fuelChosen = false;
 
     float waitSecs = 0;
-    bool start = false;
+    bool start = false, timerDone = false;
     bool won = false;
     bool waitWon = false;
     float wonSecs = 0;
@@ -50,6 +52,11 @@ public class level2 : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        }
+
         if (won)
         {
             wonSecs += Time.deltaTime;
@@ -101,29 +108,35 @@ public class level2 : MonoBehaviour
             {
                 instructionsPanel.SetActive(false);
                 beginLevel = true;
+                chooseFuelBG.SetActive(true);
             }
+        }
+
+        if (fuelChosen)
+        {
+            fuelChosen = false;
+            StartCoroutine(SpaceShipCountDown());
         }
 
         if (beginLevel && !fuelChosen)
         {
-            chooseFuelBG.SetActive(true);
             fuelSlider.transform.GetChild(2).transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = fuelSlider.value.ToString("F1") + "k";
         }
 
-        if (beginLevel && fuelChosen)
+        if (beginLevel && timerDone)
         {
             Camera.main.transform.Translate(Vector3.up * shipSpace * Time.deltaTime);
             start = true;
         }
 
-        if (start && fuelChosen)
+        if (start && timerDone)
         {
-            if (Input.GetKey(KeyCode.LeftArrow))
+            if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
             {
                 Camera.main.transform.Rotate(Vector3.forward * rotationSpeed * Time.deltaTime);
             }
 
-            if (Input.GetKey(KeyCode.RightArrow))
+            if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
             {
                 Camera.main.transform.Rotate(-Vector3.forward * rotationSpeed * Time.deltaTime);
             }
@@ -151,6 +164,20 @@ public class level2 : MonoBehaviour
         }
     }
 
+    IEnumerator SpaceShipCountDown()
+    {
+        countdown.GetComponent<Animator>().enabled = true;
+        countdown.text = "3";
+        yield return new WaitForSeconds(1f);
+        countdown.text = "2";
+        yield return new WaitForSeconds(1f);
+        countdown.text = "1";
+        yield return new WaitForSeconds(2f);
+        Destroy(countdown.gameObject);
+        timerDone = true;
+
+    }
+
     bool GetShortestDistance()
     {
         float shortestDistance = Vector2.Distance(line.GetPosition(0), ship.transform.position);
@@ -173,9 +200,21 @@ public class level2 : MonoBehaviour
 
     public void Submit()
     {
-        fuelChosen = true;
         fuelCapacity = fuelSlider.value;
+        if (fuelCapacity > 620)
+        {
+            StartCoroutine(submitIE());
+            return;
+        }
+        fuelChosen = true;
         chooseFuelBG.SetActive(false);
+    }
+
+    IEnumerator submitIE()
+    {
+        tooExpensive.SetActive(true);
+        yield return new WaitForSeconds(2f);
+        tooExpensive.SetActive(false);
     }
 
     public void setLostTrue()

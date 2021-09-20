@@ -16,6 +16,9 @@ public class characterMovementLevel5 : MonoBehaviour
     public GameObject vitamin, bluePills;
     public GameObject TV, TVPanel;
     public GameObject SunMsg;
+    public AudioSource[] fairouzes;
+    public Image micro;
+    public Sprite microOff, microOn;
 
     bool fixCamera = false;
     bool grounded = false;
@@ -28,16 +31,17 @@ public class characterMovementLevel5 : MonoBehaviour
 
     float runningTime = 10f;
 
+    level5 lvl5;
     void Start()
     {
-        
+        lvl5 = FindObjectOfType<level5>();
     }
 
     void Update()
     {
         transform.GetChild(0).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "00:" + runningTime.ToString("00");
 
-        if (!FindObjectOfType<level5>().lost && FindObjectOfType<level5>().beginLevel && !scanning && !xray && !SunMsg.activeInHierarchy)
+        if (!lvl5.lost && lvl5.beginLevel && !scanning && !xray && !SunMsg.activeInHierarchy && !TVPanel.activeInHierarchy)
         {
             if (!fixCamera)
             {
@@ -99,6 +103,7 @@ public class characterMovementLevel5 : MonoBehaviour
             {
                 Camera.main.GetComponent<level5>().winningThings[1] = true;
                 Destroy(vitamin);
+                onVitamin = false;
             }
         }
 
@@ -107,24 +112,32 @@ public class characterMovementLevel5 : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Return))
             {
                 Destroy(bluePills);
-                FindObjectOfType<level5>().sunShown1 = false;
-                FindObjectOfType<level5>().sunShown2 = false;
-                FindObjectOfType<level5>().hitBySun = false;
-                FindObjectOfType<level5>().firstSun = true;
-                FindObjectOfType<level5>().resetSunTime();
+                lvl5.sunShown1 = false;
+                lvl5.sunShown2 = false;
+                lvl5.hitBySun = false;
+                lvl5.firstSun = true;
+                lvl5.resetSunTime();
+                onBluePills = false;
             }
+        }
+
+        if (SunMsg.activeInHierarchy && Input.GetKeyDown(KeyCode.Space))
+        {
+            SunMsg.SetActive(false);
+            fairouzes[1].Stop();
         }
 
         if (xray && Input.GetKeyDown(KeyCode.Space))
         {
+            fairouzes[0].Stop();
             xray_result.GetComponent<Image>().sprite = xray_explanation;
             xray_result.transform.GetChild(1).gameObject.SetActive(true);
             xray_result.transform.GetChild(0).gameObject.SetActive(false);
             xray = false;
         }
 
-        if ((FindObjectOfType<level5>().sunShown1 && transform.position.x > 10.53f) || 
-            (FindObjectOfType<level5>().sunShown2 && transform.position.x > -7.40565f && transform.position.x < 7.888f))
+        if ((lvl5.sunShown1 && transform.position.x > 10.53f) || 
+            (lvl5.sunShown2 && transform.position.x > -7.40565f && transform.position.x < 7.888f))
         {
             FindObjectOfType<level5>().hitBySun = true;
             Debug.Log("Gi");
@@ -139,17 +152,42 @@ public class characterMovementLevel5 : MonoBehaviour
         if (tv && Input.GetKeyDown(KeyCode.Return))
         {
             TVPanel.SetActive(true);
-            tvCollisionSaved.enabled = false;
+            if (!fairouz6)
+            { 
+                lvl5.fairouzesPlay(3);
+                fairouz6 = true;
+            }
         }
 
-        if (SunMsg.activeInHierarchy && Input.GetKeyDown(KeyCode.Space))
+        if (TVPanel.activeInHierarchy && Input.GetKeyDown(KeyCode.Space))
         {
-            SunMsg.SetActive(false);
+            TVPanel.SetActive(false);
+
         }
 
+        if (fairouzesPlaying())
+        {
+            micro.sprite = microOn;
+        }
+        else
+        {
+            micro.sprite = microOff;
+        }
+    }
+
+    public bool fairouzesPlaying()
+    {
+        for (int i = 0; i < fairouzes.Length; i++)
+        {
+            if (fairouzes[i].isPlaying)
+                return true;
+        }
+
+        return false;
     }
 
     Collider2D collisionSaved, tvCollisionSaved;
+    bool fairouz1 = false, fairouz3 = false, fairouz6 = false;
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Ground" && grounded == false)
@@ -166,17 +204,30 @@ public class characterMovementLevel5 : MonoBehaviour
             {
                 sunMsg = true;
                 SunMsg.SetActive(true);
+                lvl5.fairouzesPlay(1);
             }
         }
 
         if (collision.gameObject.tag == "Instructions")
         {
             instructionsPanel.SetActive(true);
+
+            if (!fairouz1)
+            {
+                lvl5.fairouzesPlay(5);
+                fairouz1 = true;
+            }
         }
 
         if (collision.gameObject.tag == "Instructions2")
         {
             instructionsPanel2.SetActive(true);
+
+            if (!fairouz3)
+            {
+                lvl5.fairouzesPlay(2);
+                fairouz3 = true;
+            }
         }
 
         if (collision.gameObject.tag == "Scanner")
@@ -256,11 +307,13 @@ public class characterMovementLevel5 : MonoBehaviour
         if (collision.gameObject.tag == "Instructions")
         {
             instructionsPanel.SetActive(false);
+            fairouzes[5].Stop();
         }
 
         if (collision.gameObject.tag == "Instructions2")
         {
             instructionsPanel2.SetActive(false);
+            fairouzes[2].Stop();
         }
 
         if (collision.gameObject.tag == "Scanner")
@@ -295,6 +348,11 @@ public class characterMovementLevel5 : MonoBehaviour
         }
     }
 
+    public void resetMics(int id)
+    {
+        fairouzes[id].Play();
+    }
+
     IEnumerator ScanningOperation()
     {
         collisionSaved.enabled = false;
@@ -312,6 +370,7 @@ public class characterMovementLevel5 : MonoBehaviour
         xray = true;
         scanning = false;
         Camera.main.GetComponent<level5>().winningThings[0] = true;
+        lvl5.fairouzesPlay(0);
         xray_result.SetActive(true);
         collisionSaved.enabled = true;
     }

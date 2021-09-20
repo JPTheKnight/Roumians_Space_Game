@@ -30,6 +30,9 @@ public class characterMovementLevel7 : MonoBehaviour
     public GameObject doctorLost;
     public GameObject[] doctorQNA;
     public GameObject doctorDoor;
+    public AudioSource[] fairouzes;
+    public Image microphone;
+    public Sprite microOff, microOn;
 
     bool O2Damaged = false;
 
@@ -47,10 +50,12 @@ public class characterMovementLevel7 : MonoBehaviour
     bool micro = false, micro_rocks = false, rock_name = false;
     bool o2instruct = false, o2tank = false, o2warning = false;
     bool enteredDoctor = false, talkDoctor = false, doctorPressed = false, doctorNext = false, answer1 = false, answer2 = false;
+    bool dirtyEnviroOn = false;
 
+    level7 lvl7;
     void Start()
     {
-        
+        lvl7 = FindObjectOfType<level7>();
     }
 
     float msgtimer = 1f;
@@ -59,19 +64,20 @@ public class characterMovementLevel7 : MonoBehaviour
 
     void Update()
     {
-        if (FindObjectOfType<level7>().beginLevel && timeForO2 > 0 && timeForO2 < 10000f)
+        if (lvl7.beginLevel && timeForO2 > 0 && timeForO2 < 10000f)
         {
             timeForO2 -= Time.deltaTime;
         }
-        if (!FindObjectOfType<level7>().lost && FindObjectOfType<level7>().beginLevel && !scanning && !xray && radar_repaired && !tv_suggest && !micro_rocks && !rock_name && !o2warning && !o2tank && !O2Puzzle.activeInHierarchy && !doctorPressed && timeForO2 <= 0)
+        if (!lvl7.lost && lvl7.beginLevel && !scanning && !xray && radar_repaired && !tv_suggest && !micro_rocks && !rock_name && !o2warning && !o2tank && !O2Puzzle.activeInHierarchy && !doctorPressed && timeForO2 <= 0)
         {
             O2Damaged = true;
             timeForO2 = 1000000f;
             o2warning = true;
             O2Warning.SetActive(true);
+            lvl7.fairouzesPlay(5);
         }
 
-        if (!FindObjectOfType<level7>().lost && FindObjectOfType<level7>().beginLevel && !scanning && !xray && radar_repaired && !tv_suggest && !micro_rocks && !rock_name && !o2warning && !o2tank && !O2Puzzle.activeInHierarchy && !doctorPressed)
+        if (!lvl7.lost && lvl7.beginLevel && !scanning && !xray && radar_repaired && !tv_suggest && !micro_rocks && !rock_name && !o2warning && !o2tank && !O2Puzzle.activeInHierarchy && !doctorPressed)
         {
             if (transform.position.y > Camera.main.transform.position.y && Camera.main.transform.position.y < 0.84f)
             {
@@ -149,7 +155,7 @@ public class characterMovementLevel7 : MonoBehaviour
             if ((((dishCenter.transform.rotation.eulerAngles.z + 540) % 360) - 180) > 36.347f && (((dishCenter.transform.rotation.eulerAngles.z + 540) % 360) - 180) < 38.347f)
             {
                 radar_repaired = true;
-                FindObjectOfType<level7>().winningThings[1] = true;
+                lvl7.winningThings[1] = true;
                 tv_working = true;
                 TV.transform.GetChild(1).gameObject.SetActive(false);
                 dishCenter.transform.GetChild(0).transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.green;
@@ -160,12 +166,14 @@ public class characterMovementLevel7 : MonoBehaviour
         {
             TV_Suggest.SetActive(true);
             tv_suggest = true;
+            lvl7.fairouzesPlay(2);
         }
 
         if (tv_suggest && Input.GetKeyDown(KeyCode.Space))
         {
             TV_Suggest.SetActive(false);
             tv_suggest = false;
+            fairouzes[2].Stop();
         }
 
         if (rover && Input.GetKeyDown(KeyCode.Return))
@@ -201,6 +209,7 @@ public class characterMovementLevel7 : MonoBehaviour
             micro_rocks = true;
             micro = false;
             foundRocks.SetActive(true);
+            lvl7.fairouzesPlay(4);
         }
 
         if (activateTimer)
@@ -226,7 +235,7 @@ public class characterMovementLevel7 : MonoBehaviour
             rocksInfo.SetActive(false);
             rock_name = false;
             microCollisionSaved.enabled = false;
-            FindObjectOfType<level7>().winningThings[2] = true;
+            lvl7.winningThings[2] = true;
 
             for (int i = 0; i < roverRocks.Length; i++)
             {
@@ -238,6 +247,7 @@ public class characterMovementLevel7 : MonoBehaviour
         {
             o2warning = false;
             O2Warning.SetActive(false);
+            fairouzes[5].Stop();
         }
 
         if (o2instruct && Input.GetKeyDown(KeyCode.Return))
@@ -245,16 +255,18 @@ public class characterMovementLevel7 : MonoBehaviour
             o2instruct = false;
             O2Instructions.SetActive(true);
             o2tank = true;
+            lvl7.fairouzesPlay(6);
         }
 
         if (o2tank && Input.GetKeyDown(KeyCode.Space))
         {
             o2tank = false;
             O2Instructions.SetActive(false);
+            fairouzes[6].Stop();
             O2Puzzle.SetActive(true);
         }
 
-        if (O2Damaged)
+        if (O2Damaged && !O2Warning.activeInHierarchy)
         {
             if (timeToSolveO2 > 0)
                 timeToSolveO2 -= Time.deltaTime;
@@ -264,7 +276,8 @@ public class characterMovementLevel7 : MonoBehaviour
             if (timeToSolveO2 < 0)
             {
                 O2Lost.SetActive(true);
-                FindObjectOfType<level7>().lost = true;
+                lvl7.lost = true;
+                lvl7.fairouzesPlay(9);
             }
         }
         else
@@ -289,21 +302,27 @@ public class characterMovementLevel7 : MonoBehaviour
                 timeChezDr -= Time.deltaTime;
             timeDrText.text = timeChezDr.ToString("00");
             dirtyEnviro.gameObject.SetActive(true);
-            dirtyEnviro.GetComponent<Animator>().enabled = true;
+            dirtyEnviro.enabled = true;
+            dirtyEnviroOn = true;
 
-            if (timeChezDr < 0)
+            if (timeChezDr < 0 && !lvl7.lost)
             {
                 doctorLost.SetActive(true);
-                FindObjectOfType<level7>().lost = true;
+                lvl7.lost = true;
+                lvl7.fairouzesPlay(8);
             }
         }
         else
         {
-            dirtyEnviro.gameObject.SetActive(false);
-            dirtyEnviro.GetComponent<Animator>().Play("showDirtyEnviro", -1, 0);
-            timeDrText.text = "";
-            dirtyEnviro.GetComponent<Animator>().enabled = false;
-            timeChezDr = 40f;
+            if (dirtyEnviroOn)
+            {
+                dirtyEnviro.gameObject.SetActive(false);
+                dirtyEnviro.Play("showDirtyEnviro", -1, 0);
+                timeDrText.text = "";
+                dirtyEnviro.enabled = false;
+                timeChezDr = 30f;
+                dirtyEnviroOn = false;
+            }
         }
 
         if (talkDoctor && Input.GetKeyDown(KeyCode.Return))
@@ -333,7 +352,7 @@ public class characterMovementLevel7 : MonoBehaviour
                 doctorQNA[5].SetActive(false);
                 doctorPressed = false;
                 doctorCollisionSaved.enabled = false;
-                FindObjectOfType<level7>().winningThings[3] = true;
+                lvl7.winningThings[3] = true;
             }
 
             doctorNext = true;
@@ -357,9 +376,30 @@ public class characterMovementLevel7 : MonoBehaviour
                 qnaID++;
             }
         }
+
+        if (fairouzesPlaying())
+        {
+            microphone.sprite = microOn;
+        }
+        else
+        {
+            microphone.sprite = microOff;
+        }
+    }
+
+    public bool fairouzesPlaying()
+    {
+        for (int i = 0; i < fairouzes.Length; i++)
+        {
+            if (fairouzes[i].isPlaying)
+                return true;
+        }
+
+        return false;
     }
 
     Collider2D tvCollisionSaved, radarCollisionSaved, roverCollisionSaved, microCollisionSaved, o2CollisionSaved, doctorCollisionSaved;
+    bool fairouz1 = false, fairouz2 = false, fairouz3 = false;
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Ground" && grounded == false)
@@ -376,11 +416,21 @@ public class characterMovementLevel7 : MonoBehaviour
         if (collision.gameObject.tag == "Instructions")
         {
             instructionsPanel.SetActive(true);
+            if (!fairouz1)
+            {
+                fairouz1 = true;
+                lvl7.fairouzesPlay(0);
+            }
         }
 
         if (collision.gameObject.tag == "Instructions2")
         {
             instructionsPanel2.SetActive(true);
+            if (!fairouz2)
+            {
+                fairouz2 = true;
+                lvl7.fairouzesPlay(3);
+            }
         }
 
         if (collision.gameObject.tag == "Scanner")
@@ -416,7 +466,14 @@ public class characterMovementLevel7 : MonoBehaviour
             TV.transform.GetChild(0).gameObject.SetActive(true);
             tvCollisionSaved = collision;
             if (!tv_working)
+            {
                 TV_Error.SetActive(true);
+                if (!fairouz3)
+                {
+                    lvl7.fairouzesPlay(1);
+                    fairouz3 = true;
+                }
+            }
         }
 
         if (collision.gameObject.tag == "Rock" && roverWalking && Vector2.Distance(Rover.transform.position, transform.position) < 7.5f)
@@ -455,11 +512,13 @@ public class characterMovementLevel7 : MonoBehaviour
         if (collision.gameObject.tag == "Instructions")
         {
             instructionsPanel.SetActive(false);
+            fairouzes[0].Stop();
         }
 
         if (collision.gameObject.tag == "Instructions2")
         {
             instructionsPanel2.SetActive(false);
+            fairouzes[3].Stop();
         }
 
         if (collision.gameObject.tag == "Door")
@@ -489,7 +548,10 @@ public class characterMovementLevel7 : MonoBehaviour
         {
             TV.transform.GetChild(0).gameObject.SetActive(false);
             if (!tv_working)
+            {
                 TV_Error.SetActive(false);
+                fairouzes[1].Stop();
+            }
             tv = false;
         }
 
@@ -516,7 +578,7 @@ public class characterMovementLevel7 : MonoBehaviour
         }
         else
         {
-            FindObjectOfType<level7>().lost = true;
+            lvl7.lost = true;
             doctorLost.SetActive(true);
         }
     }
@@ -529,7 +591,7 @@ public class characterMovementLevel7 : MonoBehaviour
         }
         else
         {
-            FindObjectOfType<level7>().lost = true;
+            lvl7.lost = true;
             doctorLost.SetActive(true);
         }
     }
@@ -541,17 +603,24 @@ public class characterMovementLevel7 : MonoBehaviour
         if (id != 4)
         {
             O2Lost.SetActive(true);
-            FindObjectOfType<level7>().lost = true;
+            lvl7.lost = true;
+            lvl7.fairouzesPlay(9);
         }
         if (id == 4)
         {
             O2Damaged = false;
             O2Congrats.SetActive(true);
-            Destroy(O2Congrats, 4f);
+            lvl7.fairouzesPlay(7);
+            Destroy(O2Congrats, 6f);
         }
 
         O2Puzzle.SetActive(false);
         o2CollisionSaved.transform.GetChild(0).gameObject.SetActive(false);
+    }
+
+    public void resetMics(int id)
+    {
+        fairouzes[id].Play();
     }
 
     IEnumerator ScanningOperation()

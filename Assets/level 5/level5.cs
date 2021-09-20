@@ -15,6 +15,7 @@ public class level5 : MonoBehaviour
     public Button[] NumbersTV;
     public GameObject redRoom1, redRoom2;
     public GameObject goToPharma;
+    public GameObject timeLost, sunLost, codeLost;
 
     [HideInInspector]
     public bool[] winningThings = { false, false, false, false };
@@ -32,27 +33,36 @@ public class level5 : MonoBehaviour
     float waitForLost = 0;
     float timeFromSun;
 
-    int minutes = 2;
+    int minutes = 4;
     float seconds = 0;
 
     //sun angles: -45.068 24.958 / 166.968 210.726
 
     bool redRoom1Anim = false, redRoom2Anim = false;
 
+    characterMovementLevel5 cml5;
+
     private void Start()
     {
         timeFromSun = timeToRunFromSun;
+        cml5 = FindObjectOfType<characterMovementLevel5>();
     }
 
+    bool fairouz5 = false;
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        }
+
         if (lost)
         {
             FindObjectOfType<characterMovementLevel5>().GetComponent<Animator>().SetBool("dying", true);
             fade.gameObject.SetActive(true);
             fade.Play("fadeInAnim");
             waitForLost += Time.deltaTime;
-            if (waitForLost > 4f)
+            if (waitForLost > 5f)
             {
                 UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
                 Debug.Log("Test");
@@ -76,7 +86,7 @@ public class level5 : MonoBehaviour
             }
         }
 
-        if (beginLevel && !fullyWon)
+        if (beginLevel && !fullyWon && !cml5.SunMsg.activeInHierarchy)
         {
             if (seconds > 0f)
             {
@@ -90,9 +100,11 @@ public class level5 : MonoBehaviour
 
             timer.text = minutes.ToString("00") + ":" + seconds.ToString("00");
 
-            if (minutes == 0 && seconds < 0)
+            if (minutes == 0 && seconds < 0 && !lost)
             {
                 lost = true;
+                timeLost.SetActive(true);
+                fairouzesPlay(6);
             }
         }
 
@@ -115,6 +127,8 @@ public class level5 : MonoBehaviour
         else
         {
             StopAllCoroutines();
+            redRoom1.SetActive(false);
+            redRoom2.SetActive(false);
             redRoom1Anim = false;
             redRoom2Anim = false;
         }
@@ -136,20 +150,32 @@ public class level5 : MonoBehaviour
         if (hitBySun && !firstSun)
         {
             FindObjectOfType<characterMovementLevel5>().transform.GetChild(1).gameObject.SetActive(true);
-            timeFromSun -= Time.deltaTime;
+            if (timeFromSun > 0)
+                timeFromSun -= Time.deltaTime;
             sunTimer1.text = timeFromSun.ToString("00");
             sunTimer2.text = timeFromSun.ToString("00");
-            goToPharma.SetActive(true);
+            if (!fairouz5)
+            {
+                goToPharma.SetActive(true);
+                fairouzesPlay(4);
+                fairouz5 = true;
+            }
             Destroy(goToPharma, 3f);
 
             if (timeFromSun < 0)
             {
                 lost = true;
+                sunLost.SetActive(true);
+                fairouzesPlay(7);
+                sunTimer1.text = "";
+                sunTimer2.text = "";
             }
         }
         else if (hitBySun && firstSun)
         {
             lost = true;
+            sunLost.SetActive(true);
+            fairouzesPlay(7);
         }
         if (!hitBySun)
         {
@@ -169,6 +195,8 @@ public class level5 : MonoBehaviour
             else
             {
                 lost = true;
+                codeLost.SetActive(true);
+                fairouzesPlay(8);
             }
         }
 
@@ -201,5 +229,14 @@ public class level5 : MonoBehaviour
             redRoom.SetActive(false);
             yield return new WaitForSeconds(1f);
         }
+    }
+
+    public void fairouzesPlay(int id)
+    {
+        for (int i = 0; i < cml5.fairouzes.Length; i++)
+        {
+            cml5.fairouzes[i].Stop();
+        }
+        cml5.fairouzes[id].Play();
     }
 }

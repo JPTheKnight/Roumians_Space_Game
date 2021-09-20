@@ -46,6 +46,11 @@ public class level6 : MonoBehaviour
     bool shadowOn = false;
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        }
+
         if (won)
         {
             return;
@@ -138,7 +143,7 @@ public class level6 : MonoBehaviour
                 {
                     GameObject result1 = Instantiate(resultText, canvas.transform);
                     Destroy(result1, 4.5f);
-                    result1.GetComponent<TextMeshProUGUI>().text = "Level 7 accomplished!";
+                    result1.GetComponent<TextMeshProUGUI>().text = "Level 6 accomplished!";
                     won = true;
                 }
             }

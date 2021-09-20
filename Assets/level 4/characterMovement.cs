@@ -18,6 +18,9 @@ public class characterMovement : MonoBehaviour
     public GameObject inputCodePanel;
     public GameObject littleInfoWon;
     public TextMeshProUGUI[] codeTexts;
+    public AudioSource[] fairouzes;
+    public Image micro;
+    public Sprite microOff, microOn;
     int[] codeNumbers = { 0, 0, 0 };
 
     bool[] plantsChosen = { false, false, false, false };
@@ -27,9 +30,10 @@ public class characterMovement : MonoBehaviour
     bool insertCode = false;
     bool fixedForCode = false;
 
+    level4 lvl4;
     void Start()
     {
-        
+        lvl4 = FindObjectOfType<level4>();
     }
 
     int codeID = 0;
@@ -37,7 +41,7 @@ public class characterMovement : MonoBehaviour
     void Update()
     {
 
-        if (!FindObjectOfType<level4>().lost && FindObjectOfType<level4>().beginLevel && !fixedForCode)
+        if (!lvl4.lost && lvl4.beginLevel && !fixedForCode)
         {
             if (transform.position.y > Camera.main.transform.position.y && Camera.main.transform.position.y < 0.84f)
             {
@@ -81,7 +85,7 @@ public class characterMovement : MonoBehaviour
                 GetComponent<Animator>().SetBool("running", false);
             }
 
-            if (Input.GetKeyDown(KeyCode.Space) && grounded && transform.position.x < -7.40565f)
+            if (Input.GetKeyDown(KeyCode.Space) && grounded && transform.position.x < -9.50565f)
             {
                 GetComponent<Rigidbody2D>().AddForce(Vector2.up * speedAscending);
                 GetComponent<Animator>().SetBool("jumping", false);
@@ -105,7 +109,8 @@ public class characterMovement : MonoBehaviour
                         {
                             plantsMaafnin[i].SetActive(true);
                             plants[i].gameObject.SetActive(false);
-                            FindObjectOfType<level4>().lost = true;
+                            lvl4.lost = true;
+                            lvl4.fairouzesPlay(4);
                             return;
                         }
 
@@ -131,7 +136,7 @@ public class characterMovement : MonoBehaviour
 
         if (plantsDone[3])
         {
-            FindObjectOfType<level4>().numsWinsCanvas[0].SetActive(true);
+            lvl4.numsWinsCanvas[0].SetActive(true);
             testNumbers();
         }
 
@@ -167,9 +172,29 @@ public class characterMovement : MonoBehaviour
             else
             {
                 Camera.main.GetComponent<level4>().lost = true;
-                FindObjectOfType<level4>().lostPanel.GetComponent<Image>().sprite = FindObjectOfType<level4>().lostMessage[1];
+                lvl4.lostPanel.GetComponent<Image>().sprite = lvl4.lostMessage[1];
             }
         }
+
+        if (fairouzesPlaying())
+        {
+            micro.sprite = microOn;
+        }
+        else
+        {
+            micro.sprite = microOff;
+        }
+    }
+
+    public bool fairouzesPlaying()
+    {
+        for (int i = 0; i < fairouzes.Length; i++)
+        {
+            if (fairouzes[i].isPlaying)
+                return true;
+        }
+
+        return false;
     }
 
     public void testNumbers()
@@ -185,6 +210,12 @@ public class characterMovement : MonoBehaviour
         inputCodeSquare.SetActive(true);
     }
 
+    public void resetMics(int id)
+    {
+        fairouzes[id].Play();
+    }
+
+    bool fairouz1 = false, fairouz2 = false, fairouz3 = false;
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Ground" && grounded == false)
@@ -201,11 +232,23 @@ public class characterMovement : MonoBehaviour
         if (collision.gameObject.tag == "Instructions")
         {
             instructionsPanel.SetActive(true);
+
+            if (!fairouz1)
+            {
+                lvl4.fairouzesPlay(0);
+                fairouz1 = true;
+            }
         }
 
         if (collision.gameObject.tag == "Instructions2")
         {
             instructionsPanel2.SetActive(true);
+
+            if (!fairouz3)
+            {
+                lvl4.fairouzesPlay(2);
+                fairouz3 = true;
+            }
         }
 
         if (collision.gameObject.name == "rosePlant")
@@ -249,16 +292,24 @@ public class characterMovement : MonoBehaviour
         if (collision.gameObject.tag == "Door")
         {
             collision.gameObject.transform.parent.GetChild(0).GetComponent<Animator>().SetBool("on", false);
+
+            if (!fairouz2 && transform.position.x > -6.84f)
+            {
+                lvl4.fairouzesPlay(1);
+                fairouz2 = true;
+            }
         }
 
         if (collision.gameObject.tag == "Instructions")
         {
             instructionsPanel.SetActive(false);
+            fairouzes[0].Stop();
         }
 
         if (collision.gameObject.tag == "Instructions2")
         {
             instructionsPanel2.SetActive(false);
+            fairouzes[2].Stop();
         }
 
         if (collision.gameObject.name == "rosePlant")

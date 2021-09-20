@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class level4 : MonoBehaviour
 {
@@ -11,6 +12,14 @@ public class level4 : MonoBehaviour
     public GameObject[] numsWinsCanvas;
     public GameObject lostPanel;
     public Sprite[] lostMessage;
+    public TextMeshProUGUI timerText;
+    public GameObject rashMsg, rashLost;
+
+    int minutes = 2;
+    float seconds = 0;
+    float timeToRash = 30f;
+    float timeToRed = 0f;
+    bool rashed = false;
 
     public GameObject instructionsPanel;
     [HideInInspector]
@@ -31,21 +40,32 @@ public class level4 : MonoBehaviour
     public bool lost { get; set; }
     float waitForLost = 0;
 
+    bool fairouz4 = false;
+
+    characterMovement cm;
+
     private void Start()
     {
         fade.Play("fadeOutAnim");
+        cm = FindObjectOfType<characterMovement>();
     }
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        }
+
         if (lost)
         {
-            lostPanel.SetActive(true);
+            if (!rashLost.activeInHierarchy)
+                lostPanel.SetActive(true);
             FindObjectOfType<characterMovement>().GetComponent<Animator>().SetBool("dying", true);
             fade.gameObject.SetActive(true);
             fade.Play("fadeInAnim");
             waitForLost += Time.deltaTime;
-            if (waitForLost > 4f)
+            if (waitForLost > 8f)
             {
                 UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
                 Debug.Log("Test");
@@ -55,6 +75,7 @@ public class level4 : MonoBehaviour
         if (waitSecs < 4f)
         {
             waitSecs += Time.deltaTime;
+
         }
 
         if (waitSecs > 3f && !beginLevel)
@@ -69,7 +90,61 @@ public class level4 : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButtonUp(0) && !lost && (transform.position.x > -7.40565f && transform.position.x < 7.546844f) && beginLevel)
+        if (timeToRash > 0 && beginLevel)
+        {
+            timeToRash -= Time.deltaTime;
+            timeToRed += Time.deltaTime;
+            cm.GetComponent<SpriteRenderer>().color = new Color32(255, (byte)(255 - timeToRed * 5), (byte)(255 - timeToRed * 5), 255);
+        }
+
+        if (timeToRash <= 0)
+        {
+            timerText.gameObject.SetActive(true);
+
+            if (!rashed)
+            {
+                rashMsg.SetActive(true);
+                if (!fairouz4)
+                {
+                    for (int i = 0; i < cm.fairouzes.Length; i++)
+                    {
+                        cm.fairouzes[i].Stop();
+                    }
+                    cm.fairouzes[3].Play();
+                    fairouz4 = true;
+                }
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    cm.fairouzes[3].Stop();
+                    rashMsg.SetActive(false);
+                    rashed = true;
+                }
+            }
+
+            if (rashed)
+            {
+                if (seconds > 0f)
+                {
+                    seconds -= Time.deltaTime;
+                }
+                if (seconds <= 0 && minutes > 0)
+                {
+                    minutes -= 1;
+                    seconds = 59.5f;
+                }
+
+                timerText.text = minutes.ToString("00") + ":" + seconds.ToString("00");
+
+                if (minutes == 0 && seconds < 0)
+                {
+                    rashLost.SetActive(true);
+                    fairouzesPlay(7);
+                    lost = true;
+                }
+            }
+        }
+
+        if (Input.GetMouseButtonUp(0) && !lost && (transform.position.x > -7.40565f && transform.position.x < 7.546844f) && beginLevel && !rashMsg.activeInHierarchy)
         {
             RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector3.forward);
 
@@ -105,6 +180,7 @@ public class level4 : MonoBehaviour
                                 hit.collider.transform.GetChild(0).gameObject.SetActive(false);
                                 lost = true;
                                 lostPanel.GetComponent<Image>().sprite = lostMessage[1];
+                                fairouzesPlay(5);
                                 Debug.Log("Lost");
                             }
                             break;
@@ -125,6 +201,7 @@ public class level4 : MonoBehaviour
                                 hit.collider.transform.GetChild(0).gameObject.SetActive(false);
                                 lost = true;
                                 lostPanel.GetComponent<Image>().sprite = lostMessage[1];
+                                fairouzesPlay(5);
                                 Debug.Log("Lost");
                             }
                             break;
@@ -145,6 +222,7 @@ public class level4 : MonoBehaviour
                                 hit.collider.transform.GetChild(0).gameObject.SetActive(false);
                                 lost = true;
                                 lostPanel.GetComponent<Image>().sprite = lostMessage[1];
+                                fairouzesPlay(5);
                                 Debug.Log("Lost");
                             }
                             break;
@@ -165,6 +243,7 @@ public class level4 : MonoBehaviour
                                 hit.collider.transform.GetChild(0).gameObject.SetActive(false);
                                 lost = true;
                                 lostPanel.GetComponent<Image>().sprite = lostMessage[1];
+                                fairouzesPlay(5);
                                 Debug.Log("Lost");
                             }
                             break;
@@ -185,6 +264,7 @@ public class level4 : MonoBehaviour
                                 hit.collider.transform.GetChild(0).gameObject.SetActive(false);
                                 lost = true;
                                 lostPanel.GetComponent<Image>().sprite = lostMessage[1];
+                                fairouzesPlay(5);
                                 Debug.Log("Lost");
                             }
                             break;
@@ -205,6 +285,7 @@ public class level4 : MonoBehaviour
                                 hit.collider.transform.GetChild(0).gameObject.SetActive(false);
                                 lost = true;
                                 lostPanel.GetComponent<Image>().sprite = lostMessage[1];
+                                fairouzesPlay(5);
                                 Debug.Log("Lost");
                             }
                             break;
@@ -225,6 +306,7 @@ public class level4 : MonoBehaviour
                                 hit.collider.transform.GetChild(0).gameObject.SetActive(false);
                                 lost = true;
                                 lostPanel.GetComponent<Image>().sprite = lostMessage[1];
+                                fairouzesPlay(5);
                                 Debug.Log("Lost");
                             }
                             break;
@@ -245,6 +327,7 @@ public class level4 : MonoBehaviour
                                 hit.collider.transform.GetChild(0).gameObject.SetActive(false);
                                 lost = true;
                                 lostPanel.GetComponent<Image>().sprite = lostMessage[1];
+                                fairouzesPlay(5);
                                 Debug.Log("Lost");
                             }
                             break;
@@ -303,7 +386,7 @@ public class level4 : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && transform.position.x > 10.83f && beginLevel)
+        if (Input.GetKeyDown(KeyCode.Return) && transform.position.x > 10.83f && beginLevel)
         {
             if (!A[0] && A[1] && !A[2] && A[3]
                 && B[0] && !B[1] && !B[2] && !B[3]
@@ -317,8 +400,18 @@ public class level4 : MonoBehaviour
             {
                 lost = true;
                 lostPanel.GetComponent<Image>().sprite = lostMessage[2];
+                fairouzesPlay(6);
             }
            
         }
+    }
+
+    public void fairouzesPlay(int id)
+    {
+        for (int i = 0; i < cm.fairouzes.Length; i++)
+        {
+            cm.fairouzes[i].Stop();
+        }
+        cm.fairouzes[id].Play();
     }
 }

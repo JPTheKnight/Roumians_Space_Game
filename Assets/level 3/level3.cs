@@ -9,6 +9,7 @@ public class level3 : MonoBehaviour
     public GameObject canvas;
     public GameObject resultText;
     public GameObject Fade;
+    public GameObject dotted_line;
 
     public GameObject instructionsPanel;
     bool beginLevel = false;
@@ -28,6 +29,11 @@ public class level3 : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        }
+
         if (waitSecs < maxwait)
         {
             waitSecs += Time.deltaTime;
@@ -55,6 +61,17 @@ public class level3 : MonoBehaviour
                 fail = false;
                 solarPanel.GetComponent<Animator>().enabled = true;
             }
+        }
+
+        zRot = ((solarPanel.transform.rotation.eulerAngles.z + 540) % 360) - 180;
+
+        if (zRot < -6.907 && zRot > -19.832)
+        {
+            dotted_line.GetComponent<SpriteRenderer>().color = Color.green;
+        }
+        else
+        {
+            dotted_line.GetComponent<SpriteRenderer>().color = Color.red;
         }
 
         if (Input.GetKeyDown(KeyCode.Space) && waitSecs > 3.5f)

@@ -25,6 +25,11 @@ public class level1 : MonoBehaviour
     float waitSecs = 0;
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        }
+
         if (waitSecs < 4f)
         {
             waitSecs += Time.deltaTime;

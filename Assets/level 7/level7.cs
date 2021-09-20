@@ -22,8 +22,20 @@ public class level7 : MonoBehaviour
     public bool[] winningThings = { false, false, false, false };
     bool fullyWon = false;
 
+    characterMovementLevel7 cml7;
+
+    private void Start()
+    {
+        cml7 = FindObjectOfType<characterMovementLevel7>();
+    }
+
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        }
+
         if (fullyWon)
         {
             Debug.Log("Won bitch");
@@ -35,7 +47,7 @@ public class level7 : MonoBehaviour
             fade.gameObject.SetActive(true);
             fade.Play("fadeInAnim");
             waitForLost += Time.deltaTime;
-            if (waitForLost > 4f)
+            if (waitForLost > 6.5f)
             {
                 UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
                 Debug.Log("Test");
@@ -84,5 +96,14 @@ public class level7 : MonoBehaviour
         FindObjectOfType<characterMovementLevel7>().scannedBones.SetActive(false);
         FindObjectOfType<characterMovementLevel7>().checkTV.SetActive(true);
         winningThings[0] = true;
+    }
+
+    public void fairouzesPlay(int id)
+    {
+        for (int i = 0; i < cml7.fairouzes.Length; i++)
+        {
+            cml7.fairouzes[i].Stop();
+        }
+        cml7.fairouzes[id].Play();
     }
 }

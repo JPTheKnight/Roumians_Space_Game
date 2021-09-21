@@ -52,11 +52,6 @@ public class level4 : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
-        }
-
         if (lost)
         {
             if (!rashLost.activeInHierarchy)
@@ -123,7 +118,7 @@ public class level4 : MonoBehaviour
 
             if (rashed)
             {
-                if (seconds > 0f)
+                if (seconds > 0f && !cm.littleInfoWon.activeInHierarchy && !cm.WonPanel.activeInHierarchy)
                 {
                     seconds -= Time.deltaTime;
                 }
@@ -135,7 +130,7 @@ public class level4 : MonoBehaviour
 
                 timerText.text = minutes.ToString("00") + ":" + seconds.ToString("00");
 
-                if (minutes == 0 && seconds < 0)
+                if (minutes == 0 && seconds < 0 && !lost)
                 {
                     rashLost.SetActive(true);
                     fairouzesPlay(7);
@@ -398,11 +393,13 @@ public class level4 : MonoBehaviour
             }
             else
             {
-                lost = true;
-                lostPanel.GetComponent<Image>().sprite = lostMessage[2];
-                fairouzesPlay(6);
-            }
-           
+                if (!lost)
+                {
+                    lost = true;
+                    lostPanel.GetComponent<Image>().sprite = lostMessage[2];
+                    fairouzesPlay(6);
+                }
+            }       
         }
     }
 

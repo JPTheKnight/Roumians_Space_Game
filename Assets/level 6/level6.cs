@@ -12,6 +12,7 @@ public class level6 : MonoBehaviour
     public GameObject resultText;
     public GameObject shipShadow;
     public GameObject Fade;
+    public GameObject WonPanel;
 
     public float capsuleSpeed;
     public float rotationSpeed;
@@ -46,11 +47,6 @@ public class level6 : MonoBehaviour
     bool shadowOn = false;
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
-        }
-
         if (won)
         {
             return;
@@ -62,9 +58,7 @@ public class level6 : MonoBehaviour
 
             if (!waitLost)
             {
-                GameObject result1 = Instantiate(resultText, canvas.transform);
-                Destroy(result1, 4.5f);
-                result1.GetComponent<TextMeshProUGUI>().text = "FAIL!";
+                resultText.SetActive(true);
                 Fade.SetActive(true);
                 Fade.GetComponent<Animator>().Play("fadeInAnim");
                 waitLost = true;
@@ -141,9 +135,9 @@ public class level6 : MonoBehaviour
                 }
                 else
                 {
-                    GameObject result1 = Instantiate(resultText, canvas.transform);
-                    Destroy(result1, 4.5f);
-                    result1.GetComponent<TextMeshProUGUI>().text = "Level 6 accomplished!";
+                    WonPanel.SetActive(true);
+                    if (PlayerPrefs.GetInt("LevelsUnlocked") < 7)
+                        PlayerPrefs.SetInt("LevelsUnlocked", 7);
                     won = true;
                 }
             }
@@ -155,12 +149,12 @@ public class level6 : MonoBehaviour
             }
         }
 
-        if (Input.GetKey(KeyCode.LeftArrow) && camOn)
+        if ((Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) && camOn)
         {
             capsule.transform.Rotate(-Vector3.forward * rotationSpeed * Time.deltaTime * 1.2f);
         }
 
-        if (Input.GetKey(KeyCode.RightArrow) && camOn)
+        if ((Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) && camOn)
         {
             capsule.transform.Rotate(Vector3.forward * rotationSpeed * Time.deltaTime * 1.2f);
         }

@@ -10,6 +10,7 @@ public class level3 : MonoBehaviour
     public GameObject resultText;
     public GameObject Fade;
     public GameObject dotted_line;
+    public GameObject WonPanel;
 
     public GameObject instructionsPanel;
     bool beginLevel = false;
@@ -29,11 +30,6 @@ public class level3 : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
-        }
-
         if (waitSecs < maxwait)
         {
             waitSecs += Time.deltaTime;
@@ -57,6 +53,7 @@ public class level3 : MonoBehaviour
             waitForFail += Time.deltaTime;
             if (waitForFail > 4f)
             {
+                resultText.SetActive(false);
                 waitForFail = 0;
                 fail = false;
                 solarPanel.GetComponent<Animator>().enabled = true;
@@ -84,19 +81,15 @@ public class level3 : MonoBehaviour
 
             if (zRot < -6.907 && zRot > -19.832)
             {
-                GameObject result1 = Instantiate(resultText, canvas.transform);
-                Destroy(result1, 4.5f);
-                result1.GetComponent<TextMeshProUGUI>().text = "Level 3 accomplished!";
-                result1.GetComponent<TextMeshProUGUI>().color = new Color32(52, 77, 255, 255);
+                WonPanel.SetActive(true);
+                if (PlayerPrefs.GetInt("LevelsUnlocked") < 4)
+                    PlayerPrefs.SetInt("LevelsUnlocked", 4);
                 solarPanel.GetComponent<Animator>().enabled = false;
                 won = true;
             }
             else
             {
-                GameObject result = Instantiate(resultText, canvas.transform);
-                Destroy(result, 4.5f);
-                result.GetComponent<TextMeshProUGUI>().text = "FAIL!";
-                result.GetComponent<TextMeshProUGUI>().color = new Color32(52, 77, 255, 255);
+                resultText.SetActive(true);
                 solarPanel.GetComponent<Animator>().enabled = false;
                 fail = true;
             }

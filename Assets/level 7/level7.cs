@@ -10,6 +10,7 @@ public class level7 : MonoBehaviour
     public float playTime = 1f;
     public Toggle[] seeToggles;
     public Sprite[] seeXray;
+    public GameObject WonPanel;
 
     public GameObject instructionsPanel;
     [HideInInspector]
@@ -26,16 +27,12 @@ public class level7 : MonoBehaviour
 
     private void Start()
     {
+        fade.Play("fadeOutAnim");
         cml7 = FindObjectOfType<characterMovementLevel7>();
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
-        }
-
         if (fullyWon)
         {
             Debug.Log("Won bitch");
@@ -74,6 +71,9 @@ public class level7 : MonoBehaviour
         if (winningThings[0] && winningThings[1] && winningThings[2] && winningThings[3])
         {
             fullyWon = true;
+            WonPanel.SetActive(true);
+            if (PlayerPrefs.GetInt("LevelsUnlocked") < 8)
+                PlayerPrefs.SetInt("LevelsUnlocked", 8);
         }
     }
 

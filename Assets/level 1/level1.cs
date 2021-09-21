@@ -9,6 +9,7 @@ public class level1 : MonoBehaviour
     public GameObject resultText;
     public GameObject[] glowImages;
     public GameObject Fade;
+    public GameObject WinPanel;
     bool[] objects = new bool[7] {true, false, false, true, false, true, false};
 
     public GameObject instructionsPanel;
@@ -25,11 +26,6 @@ public class level1 : MonoBehaviour
     float waitSecs = 0;
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
-        }
-
         if (waitSecs < 4f)
         {
             waitSecs += Time.deltaTime;
@@ -70,9 +66,7 @@ public class level1 : MonoBehaviour
             {
                 if (!objects[objectIds[i]])
                 {
-                    GameObject result = Instantiate(resultText, canvas.transform);
-                    Destroy(result, 4.5f);
-                    result.GetComponent<TextMeshProUGUI>().text = "FAIL!";
+                    StartCoroutine(lostPanel());
                     for (int j = 0; j < 7; j++)
                         glowImages[j].SetActive(false);
                     for (int j = 0; j < 3; j++)
@@ -85,13 +79,21 @@ public class level1 : MonoBehaviour
                
             }
 
-            GameObject result1 = Instantiate(resultText, canvas.transform);
-            Destroy(result1, 4.5f);
-            result1.GetComponent<TextMeshProUGUI>().text = "Level 1 accomplished!";
+
             won = true;
+            WinPanel.SetActive(true);
+            if (PlayerPrefs.GetInt("LevelsUnlocked") < 2)
+                PlayerPrefs.SetInt("LevelsUnlocked", 2);
             //Show next level button    
 
         }
+    }
+
+    IEnumerator lostPanel()
+    {
+        resultText.SetActive(true);
+        yield return new WaitForSeconds(2f);
+        resultText.SetActive(false);
     }
 
 

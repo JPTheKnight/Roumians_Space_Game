@@ -9,13 +9,14 @@ public class level2 : MonoBehaviour
     public GameObject ship;
     public GameObject horBar, horArrow;
     public GameObject canvas;
-    public GameObject resultText;
     public LineRenderer line;
     public Slider fuelSlider;
     public GameObject chooseFuelBG;
     public GameObject Fade;
     public GameObject tooExpensive;
     public TextMeshProUGUI countdown;
+    public GameObject WonPanel;
+    public GameObject lostPanel;
 
     public float shipSpace;
     public float rotationSpeed;
@@ -52,11 +53,6 @@ public class level2 : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
-        }
-
         if (won)
         {
             wonSecs += Time.deltaTime;
@@ -64,9 +60,9 @@ public class level2 : MonoBehaviour
             if (wonSecs > 4f && !waitWon)
             {
                 ship.transform.GetChild(0).GetComponent<Animator>().SetBool("set", true);
-                GameObject result1 = Instantiate(resultText, canvas.transform);
-                Destroy(result1, 4.5f);
-                result1.GetComponent<TextMeshProUGUI>().text = "Level 2 accomplished!";
+                WonPanel.SetActive(true);
+                if (PlayerPrefs.GetInt("LevelsUnlocked") < 3)
+                    PlayerPrefs.SetInt("LevelsUnlocked", 3);
                 waitWon = true;
             }
             return;
@@ -78,11 +74,10 @@ public class level2 : MonoBehaviour
 
             if (!waitLost)
             {
-                GameObject result1 = Instantiate(resultText, canvas.transform);
-                Destroy(result1, 4.5f);
-                result1.GetComponent<TextMeshProUGUI>().text = lostMsg;
                 Fade.SetActive(true);
                 Fade.GetComponent<Animator>().Play("fadeInAnim");
+                lostPanel.SetActive(true);
+                lostPanel.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = lostMsg;
                 waitLost = true;
             }
 
@@ -172,8 +167,9 @@ public class level2 : MonoBehaviour
         countdown.text = "2";
         yield return new WaitForSeconds(1f);
         countdown.text = "1";
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
         Destroy(countdown.gameObject);
+        yield return new WaitForSeconds(1f);
         timerDone = true;
 
     }

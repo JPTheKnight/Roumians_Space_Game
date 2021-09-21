@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
@@ -8,6 +9,14 @@ public class MainMenu : MonoBehaviour
 
     int count = 0;
 
+    private void Start()
+    {
+        for (int i = 1; i < PlayerPrefs.GetInt("LevelsUnlocked", 1); i++)
+        {
+            levelButtons[i].GetComponent<Button>().interactable = true;
+            levelButtons[i].transform.GetChild(1).gameObject.SetActive(false);
+        }
+    }
     public void Next()
     {
         count++;

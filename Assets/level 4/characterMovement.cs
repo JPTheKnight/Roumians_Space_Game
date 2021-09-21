@@ -21,6 +21,7 @@ public class characterMovement : MonoBehaviour
     public AudioSource[] fairouzes;
     public Image micro;
     public Sprite microOff, microOn;
+    public GameObject WonPanel;
     int[] codeNumbers = { 0, 0, 0 };
 
     bool[] plantsChosen = { false, false, false, false };
@@ -109,8 +110,11 @@ public class characterMovement : MonoBehaviour
                         {
                             plantsMaafnin[i].SetActive(true);
                             plants[i].gameObject.SetActive(false);
-                            lvl4.lost = true;
-                            lvl4.fairouzesPlay(4);
+                            if (!lvl4.lost)
+                            {
+                                lvl4.lost = true;
+                                lvl4.fairouzesPlay(4);
+                            }
                             return;
                         }
 
@@ -171,9 +175,17 @@ public class characterMovement : MonoBehaviour
             }
             else
             {
-                Camera.main.GetComponent<level4>().lost = true;
+                lvl4.lost = true;
                 lvl4.lostPanel.GetComponent<Image>().sprite = lvl4.lostMessage[1];
             }
+        }
+
+        if (littleInfoWon.activeInHierarchy && Input.GetKeyDown(KeyCode.Space))
+        {
+            littleInfoWon.SetActive(false);
+            WonPanel.SetActive(true);
+            if (PlayerPrefs.GetInt("LevelsUnlocked") < 5)
+                PlayerPrefs.SetInt("LevelsUnlocked", 5);
         }
 
         if (fairouzesPlaying())

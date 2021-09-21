@@ -16,6 +16,7 @@ public class level5 : MonoBehaviour
     public GameObject redRoom1, redRoom2;
     public GameObject goToPharma;
     public GameObject timeLost, sunLost, codeLost;
+    public GameObject WonPanel;
 
     [HideInInspector]
     public bool[] winningThings = { false, false, false, false };
@@ -44,6 +45,7 @@ public class level5 : MonoBehaviour
 
     private void Start()
     {
+        fade.Play("fadeOutAnim");
         timeFromSun = timeToRunFromSun;
         cml5 = FindObjectOfType<characterMovementLevel5>();
     }
@@ -51,11 +53,6 @@ public class level5 : MonoBehaviour
     bool fairouz5 = false;
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
-        }
-
         if (lost)
         {
             FindObjectOfType<characterMovementLevel5>().GetComponent<Animator>().SetBool("dying", true);
@@ -162,7 +159,7 @@ public class level5 : MonoBehaviour
             }
             Destroy(goToPharma, 3f);
 
-            if (timeFromSun < 0)
+            if (timeFromSun < 0 && !lost)
             {
                 lost = true;
                 sunLost.SetActive(true);
@@ -171,7 +168,7 @@ public class level5 : MonoBehaviour
                 sunTimer2.text = "";
             }
         }
-        else if (hitBySun && firstSun)
+        else if (hitBySun && firstSun && !lost)
         {
             lost = true;
             sunLost.SetActive(true);
@@ -194,15 +191,25 @@ public class level5 : MonoBehaviour
             }
             else
             {
-                lost = true;
-                codeLost.SetActive(true);
-                fairouzesPlay(8);
+                if (!lost)
+                {
+                    lost = true;
+                    codeLost.SetActive(true);
+                    fairouzesPlay(8);
+                }
             }
         }
 
         if (winningThings[0] && winningThings[1] && winningThings[2] && winningThings[3])
         {
             fullyWon = true;
+        }
+
+        if (fullyWon)
+        {
+            WonPanel.SetActive(true);
+            if (PlayerPrefs.GetInt("LevelsUnlocked") < 6)
+                PlayerPrefs.SetInt("LevelsUnlocked", 6);
         }
     }
 

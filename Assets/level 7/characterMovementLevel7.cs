@@ -33,6 +33,7 @@ public class characterMovementLevel7 : MonoBehaviour
     public AudioSource[] fairouzes;
     public Image microphone;
     public Sprite microOff, microOn;
+    public GameObject redRoom;
 
     bool O2Damaged = false;
 
@@ -74,6 +75,7 @@ public class characterMovementLevel7 : MonoBehaviour
             timeForO2 = 1000000f;
             o2warning = true;
             O2Warning.SetActive(true);
+            StartCoroutine(RedRoom());
             lvl7.fairouzesPlay(5);
         }
 
@@ -273,7 +275,7 @@ public class characterMovementLevel7 : MonoBehaviour
             timeO2Text1.text = timeToSolveO2.ToString("00");
             timeO2Text2.text = timeToSolveO2.ToString("00");
 
-            if (timeToSolveO2 < 0)
+            if (timeToSolveO2 < 0 && !lvl7.lost)
             {
                 O2Lost.SetActive(true);
                 lvl7.lost = true;
@@ -611,6 +613,8 @@ public class characterMovementLevel7 : MonoBehaviour
             O2Damaged = false;
             O2Congrats.SetActive(true);
             lvl7.fairouzesPlay(7);
+            StopAllCoroutines();
+            Destroy(redRoom);
             Destroy(O2Congrats, 6f);
         }
 
@@ -637,5 +641,16 @@ public class characterMovementLevel7 : MonoBehaviour
         scannedBones.SetActive(true);
         xray = true;
         scanning = false;
+    }
+
+    IEnumerator RedRoom()
+    {
+        while(true)
+        {
+            redRoom.SetActive(true);
+            yield return new WaitForSeconds(1f);
+            redRoom.SetActive(false);
+            yield return new WaitForSeconds(1f);
+        }
     }
 }

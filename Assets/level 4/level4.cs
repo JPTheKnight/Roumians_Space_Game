@@ -14,6 +14,7 @@ public class level4 : MonoBehaviour
     public Sprite[] lostMessage;
     public TextMeshProUGUI timerText;
     public GameObject rashMsg, rashLost;
+    public AudioSource o2LeakSound, o2ElecSound;
 
     int minutes = 2;
     float seconds = 0;
@@ -52,6 +53,9 @@ public class level4 : MonoBehaviour
 
     void Update()
     {
+        o2LeakSound.volume = (1 - (Vector2.Distance(cm.transform.position, o2LeakSound.transform.position) + 27f)/44.151f) * 0.8f;
+        o2ElecSound.volume = (1 - (Vector2.Distance(cm.transform.position, o2ElecSound.transform.position) + 12.75f) / 25.5211f) * 0.8f;
+
         if (lost)
         {
             if (!rashLost.activeInHierarchy)
@@ -348,6 +352,7 @@ public class level4 : MonoBehaviour
             }
 
             numsWinsCanvas[1].SetActive(true);
+            o2ElecSound.Stop();
             FindObjectOfType<characterMovement>().testNumbers();
         }
 
@@ -390,6 +395,7 @@ public class level4 : MonoBehaviour
             {
                 numsWinsCanvas[2].SetActive(true);
                 FindObjectOfType<characterMovement>().testNumbers();
+                o2LeakSound.Stop();
             }
             else
             {

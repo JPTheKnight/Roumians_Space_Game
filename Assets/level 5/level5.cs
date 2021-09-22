@@ -17,6 +17,7 @@ public class level5 : MonoBehaviour
     public GameObject goToPharma;
     public GameObject timeLost, sunLost, codeLost;
     public GameObject WonPanel;
+    public AudioSource solarHit, room1WarningSound, room2WarningSound;
 
     [HideInInspector]
     public bool[] winningThings = { false, false, false, false };
@@ -53,6 +54,9 @@ public class level5 : MonoBehaviour
     bool fairouz5 = false;
     private void Update()
     {
+        room2WarningSound.volume = (1 - (Vector2.Distance(cml5.transform.position, room2WarningSound.transform.position) + 27f) / 44.151f) * 3f;
+        room1WarningSound.volume = (1 - (Vector2.Distance(cml5.transform.position, room1WarningSound.transform.position) + 12.75f) / 25.5211f) * 3f;
+
         if (lost)
         {
             FindObjectOfType<characterMovementLevel5>().GetComponent<Animator>().SetBool("dying", true);
@@ -110,6 +114,7 @@ public class level5 : MonoBehaviour
             if (!redRoom2Anim)
             {
                 StartCoroutine(redRoomAnim(redRoom2));
+                room2WarningSound.Play();
                 redRoom2Anim = true;
             }
         }
@@ -118,6 +123,7 @@ public class level5 : MonoBehaviour
             if (!redRoom1Anim)
             {
                 StartCoroutine(redRoomAnim(redRoom1));
+                room1WarningSound.Play();
                 redRoom1Anim = true;
             }
         }
@@ -128,6 +134,8 @@ public class level5 : MonoBehaviour
             redRoom2.SetActive(false);
             redRoom1Anim = false;
             redRoom2Anim = false;
+            room1WarningSound.Stop();
+            room2WarningSound.Stop();
         }
 
         if (((((sunCenterRotation.transform.rotation.eulerAngles.z + 540) % 360) - 180) < -150f || (((sunCenterRotation.transform.rotation.eulerAngles.z + 540) % 360) - 180) > 166.968f))
@@ -153,6 +161,7 @@ public class level5 : MonoBehaviour
             sunTimer2.text = timeFromSun.ToString("00");
             if (!fairouz5)
             {
+                solarHit.Play();
                 goToPharma.SetActive(true);
                 fairouzesPlay(4);
                 fairouz5 = true;
@@ -162,6 +171,7 @@ public class level5 : MonoBehaviour
             if (timeFromSun < 0 && !lost)
             {
                 lost = true;
+                solarHit.Stop();
                 sunLost.SetActive(true);
                 fairouzesPlay(7);
                 sunTimer1.text = "";
@@ -171,6 +181,7 @@ public class level5 : MonoBehaviour
         else if (hitBySun && firstSun && !lost)
         {
             lost = true;
+            solarHit.Stop();
             sunLost.SetActive(true);
             fairouzesPlay(7);
         }
@@ -185,9 +196,10 @@ public class level5 : MonoBehaviour
         {
             FindObjectOfType<characterMovementLevel5>().TVPanel.SetActive(false);
             if (numbers[0] && !numbers[1] && !numbers[2] && numbers[3] && numbers[4] && !numbers[5] && !numbers[6] && !numbers[7]
-                 && !numbers[8])
+                 && !numbers[8] && !winningThings[3])
             {
                 winningThings[3] = true;
+                cml5.smallWin.Play();
             }
             else
             {

@@ -79,7 +79,6 @@ public class level1 : MonoBehaviour
                
             }
 
-
             won = true;
             WinPanel.SetActive(true);
             if (PlayerPrefs.GetInt("LevelsUnlocked") < 2)
@@ -92,7 +91,7 @@ public class level1 : MonoBehaviour
     IEnumerator lostPanel()
     {
         resultText.SetActive(true);
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(4f);
         resultText.SetActive(false);
     }
 

@@ -34,8 +34,11 @@ public class characterMovementLevel7 : MonoBehaviour
     public Image microphone;
     public Sprite microOff, microOn;
     public GameObject redRoom;
+    public AudioSource walkingSound, scannerBeep, doorOpen, doorClose, smallWin, roverSound;
 
     bool O2Damaged = false;
+
+    bool isWalking = false, isRoverWalking = false;
 
     public int rocksCollected = 0;
 
@@ -101,6 +104,20 @@ public class characterMovementLevel7 : MonoBehaviour
                 Camera.main.transform.position = new Vector3(transform.position.x, Camera.main.transform.position.y, -10f);
             }
 
+            if ((Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) && grounded)
+            {
+                if (!isWalking)
+                {
+                    StartCoroutine(WalkingSound());
+                    isWalking = true;
+                }
+            }
+            if (!grounded || !GetComponent<Animator>().GetBool("running"))
+            {
+                walkingSound.Stop();
+                isWalking = false;
+            }
+
             if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
             {
                 transform.Translate(Vector2.right * speed * Time.deltaTime);
@@ -111,6 +128,8 @@ public class characterMovementLevel7 : MonoBehaviour
             else if (Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.D))
             {
                 GetComponent<Animator>().SetBool("running", false);
+                walkingSound.Stop();
+                isWalking = false;
             }
 
             if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
@@ -123,6 +142,8 @@ public class characterMovementLevel7 : MonoBehaviour
             else if (Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.A))
             {
                 GetComponent<Animator>().SetBool("running", false);
+                walkingSound.Stop();
+                isWalking = false;
             }
 
             if (Input.GetKeyDown(KeyCode.Space) && grounded)
@@ -158,6 +179,7 @@ public class characterMovementLevel7 : MonoBehaviour
             {
                 radar_repaired = true;
                 lvl7.winningThings[1] = true;
+                smallWin.Play();
                 tv_working = true;
                 TV.transform.GetChild(1).gameObject.SetActive(false);
                 dishCenter.transform.GetChild(0).transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.green;
@@ -187,6 +209,15 @@ public class characterMovementLevel7 : MonoBehaviour
 
         if (roverWalking)
         {
+            if (Rover.GetComponent<Animator>().GetBool("walking"))
+            {
+                if (!isRoverWalking)
+                {
+                    StartCoroutine(RoverWalkingSound());
+                    isRoverWalking = true;
+                }
+            }
+
             if (Rover.transform.position.x < transform.position.x - 1f && transform.position.x < 77.36f && Vector2.Distance(Rover.transform.position, transform.position) < 7.5f)
             {
                 Rover.transform.Translate(Vector2.right * roverSpeed * Time.deltaTime);
@@ -199,10 +230,12 @@ public class characterMovementLevel7 : MonoBehaviour
                 Rover.transform.rotation = new Quaternion(0, 180f, 0, 0);
                 Rover.GetComponent<Animator>().SetBool("walking", true);
             }
-            if (Rover.transform.position.x > transform.position.x - 0.1f && Rover.transform.position.x < transform.position.x + 0.1f || transform.position.x < 24f || transform.position.x > 77.36f)
+            if ((Rover.transform.position.x > transform.position.x - 1.01f && Rover.transform.position.x < transform.position.x + 1.01f || transform.position.x < 24f || transform.position.x > 77.36f) || Vector2.Distance(Rover.transform.position, transform.position) > 7.5f)
             {
                 Rover.transform.rotation = new Quaternion(0, 0, 0, 0);
                 Rover.GetComponent<Animator>().SetBool("walking", false);
+                roverSound.Stop();
+                isRoverWalking = false;
             }
         }
 
@@ -238,6 +271,7 @@ public class characterMovementLevel7 : MonoBehaviour
             rock_name = false;
             microCollisionSaved.enabled = false;
             lvl7.winningThings[2] = true;
+            smallWin.Play();
 
             for (int i = 0; i < roverRocks.Length; i++)
             {
@@ -355,6 +389,7 @@ public class characterMovementLevel7 : MonoBehaviour
                 doctorPressed = false;
                 doctorCollisionSaved.enabled = false;
                 lvl7.winningThings[3] = true;
+                smallWin.Play();
             }
 
             doctorNext = true;
@@ -413,6 +448,8 @@ public class characterMovementLevel7 : MonoBehaviour
         if (collision.gameObject.tag == "Door")
         {
             collision.gameObject.transform.parent.GetChild(0).GetComponent<Animator>().SetBool("on", true);
+            doorClose.Stop();
+            doorOpen.Play();
         }
 
         if (collision.gameObject.tag == "Instructions")
@@ -526,6 +563,8 @@ public class characterMovementLevel7 : MonoBehaviour
         if (collision.gameObject.tag == "Door")
         {
             collision.gameObject.transform.parent.GetChild(0).GetComponent<Animator>().SetBool("on", false);
+            doorOpen.Stop();
+            doorClose.Play();
         }
 
         if (collision.gameObject.tag == "RadarDish")
@@ -629,6 +668,7 @@ public class characterMovementLevel7 : MonoBehaviour
 
     IEnumerator ScanningOperation()
     {
+        scannerBeep.Play();
         scanning = true;
         transform.position = new Vector3(-17.255f, 1.754f, 0);
         greenBar.SetActive(true);
@@ -652,5 +692,19 @@ public class characterMovementLevel7 : MonoBehaviour
             redRoom.SetActive(false);
             yield return new WaitForSeconds(1f);
         }
+    }
+
+    IEnumerator WalkingSound()
+    {
+        walkingSound.Stop();
+        yield return new WaitForSeconds(0.2f);
+        walkingSound.Play();
+    }
+
+    IEnumerator RoverWalkingSound()
+    {
+        roverSound.Stop();
+        yield return new WaitForSeconds(0.2f);
+        roverSound.Play();
     }
 }

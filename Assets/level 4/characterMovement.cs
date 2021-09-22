@@ -22,6 +22,7 @@ public class characterMovement : MonoBehaviour
     public Image micro;
     public Sprite microOff, microOn;
     public GameObject WonPanel;
+    public AudioSource walkingSound, doorOpen, doorClose, smallWin, plantWater;
     int[] codeNumbers = { 0, 0, 0 };
 
     bool[] plantsChosen = { false, false, false, false };
@@ -30,6 +31,8 @@ public class characterMovement : MonoBehaviour
 
     bool insertCode = false;
     bool fixedForCode = false;
+
+    bool isWalking = false;
 
     level4 lvl4;
     void Start()
@@ -64,6 +67,20 @@ public class characterMovement : MonoBehaviour
                 Camera.main.transform.position = new Vector3(transform.position.x, Camera.main.transform.position.y, -10f);
             }
 
+            if ((Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) && grounded)
+            {
+                if (!isWalking)
+                {
+                    StartCoroutine(WalkingSound());
+                    isWalking = true;
+                }
+            }
+            if (!grounded || !GetComponent<Animator>().GetBool("running"))
+            {
+                walkingSound.Stop();
+                isWalking = false;
+            }
+
             if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
             {
                 transform.Translate(Vector2.right * speed * Time.deltaTime);
@@ -73,6 +90,8 @@ public class characterMovement : MonoBehaviour
             else if (Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.D))
             {
                 GetComponent<Animator>().SetBool("running", false);
+                walkingSound.Stop();
+                isWalking = false;
             }
 
             if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
@@ -84,6 +103,8 @@ public class characterMovement : MonoBehaviour
             else if (Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.A))
             {
                 GetComponent<Animator>().SetBool("running", false);
+                walkingSound.Stop();
+                isWalking = false;
             }
 
             if (Input.GetKeyDown(KeyCode.Space) && grounded && transform.position.x < -9.50565f)
@@ -123,6 +144,8 @@ public class characterMovement : MonoBehaviour
                         plantsDone[i] = true;
                         plants[i].enabled = true;
                         plants[i].GetComponent<BoxCollider2D>().enabled = false;
+                        plantWater.Stop();
+                        plantWater.Play();
                         if (plants[i].transform.position.x > transform.position.x)
                         {
                             plants[i].transform.GetChild(1).gameObject.SetActive(true);
@@ -142,6 +165,7 @@ public class characterMovement : MonoBehaviour
         {
             lvl4.numsWinsCanvas[0].SetActive(true);
             testNumbers();
+            plantsDone[3] = false;
         }
 
         if (insertCode && Input.GetKeyDown(KeyCode.Return))
@@ -211,6 +235,8 @@ public class characterMovement : MonoBehaviour
 
     public void testNumbers()
     {
+        smallWin.Play();
+
         for (int i = 0; i < Camera.main.GetComponent<level4>().numsWinsCanvas.Length; i++)
         {
             if (!Camera.main.GetComponent<level4>().numsWinsCanvas[i].activeInHierarchy)
@@ -239,6 +265,8 @@ public class characterMovement : MonoBehaviour
         if (collision.gameObject.tag == "Door")
         {
             collision.gameObject.transform.parent.GetChild(0).GetComponent<Animator>().SetBool("on", true);
+            doorClose.Stop();
+            doorOpen.Play();
         }
 
         if (collision.gameObject.tag == "Instructions")
@@ -304,6 +332,8 @@ public class characterMovement : MonoBehaviour
         if (collision.gameObject.tag == "Door")
         {
             collision.gameObject.transform.parent.GetChild(0).GetComponent<Animator>().SetBool("on", false);
+            doorOpen.Stop();
+            doorClose.Play();
 
             if (!fairouz2 && transform.position.x > -6.84f)
             {
@@ -352,5 +382,12 @@ public class characterMovement : MonoBehaviour
         {
             insertCode = false;
         }
+    }
+
+    IEnumerator WalkingSound()
+    {
+        walkingSound.Stop();
+        yield return new WaitForSeconds(0.2f);
+        walkingSound.Play();
     }
 }

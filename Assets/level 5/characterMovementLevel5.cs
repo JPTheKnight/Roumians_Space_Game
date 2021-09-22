@@ -19,6 +19,7 @@ public class characterMovementLevel5 : MonoBehaviour
     public AudioSource[] fairouzes;
     public Image micro;
     public Sprite microOff, microOn;
+    public AudioSource walkingSound, scannerBeep, doorOpen, doorClose, smallWin;
 
     bool fixCamera = false;
     bool grounded = false;
@@ -28,6 +29,8 @@ public class characterMovementLevel5 : MonoBehaviour
     bool lgem = false;
     bool tv = false;
     bool sunMsg = false;
+
+    bool isWalking = false;
 
     float runningTime = 10f;
 
@@ -66,6 +69,20 @@ public class characterMovementLevel5 : MonoBehaviour
                 }
             }
 
+            if ((Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) && grounded)
+            {
+                if (!isWalking)
+                {
+                    StartCoroutine(WalkingSound());
+                    isWalking = true;
+                }
+            }
+            if (!grounded || !GetComponent<Animator>().GetBool("running"))
+            {
+                walkingSound.Stop();
+                isWalking = false;
+            }
+
             if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
             {
                 transform.Translate(Vector2.right * speed * Time.deltaTime);
@@ -76,6 +93,8 @@ public class characterMovementLevel5 : MonoBehaviour
             else if (Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.D))
             {
                 GetComponent<Animator>().SetBool("running", false);
+                walkingSound.Stop();
+                isWalking = false;
             }
 
             if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
@@ -88,6 +107,8 @@ public class characterMovementLevel5 : MonoBehaviour
             else if (Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.A))
             {
                 GetComponent<Animator>().SetBool("running", false);
+                walkingSound.Stop();
+                isWalking = false;
             }
 
             if (Input.GetKeyDown(KeyCode.Space) && grounded)
@@ -102,6 +123,7 @@ public class characterMovementLevel5 : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Return))
             {
                 Camera.main.GetComponent<level5>().winningThings[1] = true;
+                smallWin.Play();
                 Destroy(vitamin);
                 onVitamin = false;
             }
@@ -117,6 +139,7 @@ public class characterMovementLevel5 : MonoBehaviour
                 lvl5.hitBySun = false;
                 lvl5.firstSun = true;
                 lvl5.resetSunTime();
+                lvl5.solarHit.Stop();
                 onBluePills = false;
             }
         }
@@ -199,12 +222,17 @@ public class characterMovementLevel5 : MonoBehaviour
         if (collision.gameObject.tag == "Door")
         {
             collision.gameObject.transform.parent.GetChild(0).GetComponent<Animator>().SetBool("on", true);
+            doorClose.Stop();
+            doorOpen.Play();
 
             if (!sunMsg)
             {
                 sunMsg = true;
                 SunMsg.SetActive(true);
                 lvl5.fairouzesPlay(1);
+                isWalking = false;
+                walkingSound.Stop();
+                GetComponent<Animator>().SetBool("running", false);
             }
         }
 
@@ -287,6 +315,8 @@ public class characterMovementLevel5 : MonoBehaviour
             {
                 transform.GetChild(0).gameObject.SetActive(false);
                 Camera.main.GetComponent<level5>().winningThings[2] = true;
+                smallWin.Play();
+                Destroy(collision.gameObject);
             }
         }
     }
@@ -302,6 +332,8 @@ public class characterMovementLevel5 : MonoBehaviour
         if (collision.gameObject.tag == "Door")
         {
             collision.gameObject.transform.parent.GetChild(0).GetComponent<Animator>().SetBool("on", false);
+            doorOpen.Stop();
+            doorClose.Play();
         }
 
         if (collision.gameObject.tag == "Instructions")
@@ -356,6 +388,7 @@ public class characterMovementLevel5 : MonoBehaviour
     IEnumerator ScanningOperation()
     {
         collisionSaved.enabled = false;
+        scannerBeep.Play();
         scanning = true;
         transform.position = new Vector3(-16.855f, 1.754f, 0);
         greenBar.SetActive(true);
@@ -370,8 +403,16 @@ public class characterMovementLevel5 : MonoBehaviour
         xray = true;
         scanning = false;
         Camera.main.GetComponent<level5>().winningThings[0] = true;
+        smallWin.Play();
         lvl5.fairouzesPlay(0);
         xray_result.SetActive(true);
         collisionSaved.enabled = true;
+    }
+
+    IEnumerator WalkingSound()
+    {
+        walkingSound.Stop();
+        yield return new WaitForSeconds(0.2f);
+        walkingSound.Play();
     }
 }

@@ -96,6 +96,7 @@ public class level7 : MonoBehaviour
         FindObjectOfType<characterMovementLevel7>().scannedBones.SetActive(false);
         FindObjectOfType<characterMovementLevel7>().checkTV.SetActive(true);
         winningThings[0] = true;
+        cml7.smallWin.Play();
     }
 
     public void fairouzesPlay(int id)

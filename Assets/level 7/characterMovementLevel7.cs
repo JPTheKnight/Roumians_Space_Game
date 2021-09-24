@@ -34,7 +34,7 @@ public class characterMovementLevel7 : MonoBehaviour
     public Image microphone;
     public Sprite microOff, microOn;
     public GameObject redRoom;
-    public AudioSource walkingSound, scannerBeep, doorOpen, doorClose, smallWin, roverSound;
+    public AudioSource walkingSound, scannerBeep, doorOpen, doorClose, smallWin, roverSound, redRoomSound;
 
     bool O2Damaged = false;
 
@@ -57,8 +57,11 @@ public class characterMovementLevel7 : MonoBehaviour
     bool dirtyEnviroOn = false;
 
     level7 lvl7;
+
+    levelsManager lm;
     void Start()
     {
+        lm = FindObjectOfType<levelsManager>();
         lvl7 = FindObjectOfType<level7>();
     }
 
@@ -68,6 +71,9 @@ public class characterMovementLevel7 : MonoBehaviour
 
     void Update()
     {
+        if (lm.PausePanel.activeInHierarchy) { walkingSound.Pause(); scannerBeep.Pause(); doorOpen.Pause(); doorClose.Pause(); smallWin.Pause(); roverSound.Pause(); redRoomSound.Pause(); return; }
+        else { walkingSound.UnPause(); scannerBeep.UnPause(); doorOpen.UnPause(); doorClose.UnPause(); smallWin.UnPause(); roverSound.UnPause(); redRoomSound.UnPause(); }
+
         if (lvl7.beginLevel && timeForO2 > 0 && timeForO2 < 10000f)
         {
             timeForO2 -= Time.deltaTime;
@@ -79,6 +85,7 @@ public class characterMovementLevel7 : MonoBehaviour
             o2warning = true;
             O2Warning.SetActive(true);
             StartCoroutine(RedRoom());
+            redRoomSound.Play();
             lvl7.fairouzesPlay(5);
         }
 
@@ -653,6 +660,7 @@ public class characterMovementLevel7 : MonoBehaviour
             O2Congrats.SetActive(true);
             lvl7.fairouzesPlay(7);
             StopAllCoroutines();
+            redRoomSound.Stop();
             Destroy(redRoom);
             Destroy(O2Congrats, 6f);
         }
@@ -688,9 +696,9 @@ public class characterMovementLevel7 : MonoBehaviour
         while(true)
         {
             redRoom.SetActive(true);
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.5f);
             redRoom.SetActive(false);
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.5f);
         }
     }
 

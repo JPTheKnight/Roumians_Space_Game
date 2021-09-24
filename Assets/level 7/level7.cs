@@ -24,15 +24,19 @@ public class level7 : MonoBehaviour
     bool fullyWon = false;
 
     characterMovementLevel7 cml7;
+    levelsManager lm;
 
     private void Start()
     {
+        lm = FindObjectOfType<levelsManager>();
         fade.Play("fadeOutAnim");
         cml7 = FindObjectOfType<characterMovementLevel7>();
     }
 
     void Update()
     {
+        if (lm.PausePanel.activeInHierarchy) return;
+
         if (fullyWon)
         {
             Debug.Log("Won bitch");
@@ -40,6 +44,7 @@ public class level7 : MonoBehaviour
 
         if (lost)
         {
+            lm.pauseButton.SetActive(false);
             FindObjectOfType<characterMovementLevel7>().GetComponent<Animator>().SetBool("dying", true);
             fade.gameObject.SetActive(true);
             fade.Play("fadeInAnim");
@@ -72,6 +77,7 @@ public class level7 : MonoBehaviour
         {
             fullyWon = true;
             WonPanel.SetActive(true);
+            lm.pauseButton.SetActive(false);
             if (PlayerPrefs.GetInt("LevelsUnlocked") < 8)
                 PlayerPrefs.SetInt("LevelsUnlocked", 8);
         }

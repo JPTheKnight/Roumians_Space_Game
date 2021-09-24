@@ -17,6 +17,7 @@ public class level2 : MonoBehaviour
     public TextMeshProUGUI countdown;
     public GameObject WonPanel;
     public GameObject lostPanel;
+    public AudioSource flySound;
 
     public float shipSpace;
     public float rotationSpeed;
@@ -28,12 +29,15 @@ public class level2 : MonoBehaviour
 
     float fuelCapacity = 0;
 
+    levelsManager lm;
+
     //3108
 
     //arrow: -1.268 1.268
 
     void Start()
     {
+        lm = FindObjectOfType<levelsManager>();
         fuelCapacity = toEmptyFuel;
         Fade.GetComponent<Animator>().Play("fadeOutAnim");
     }
@@ -53,9 +57,18 @@ public class level2 : MonoBehaviour
 
     private void Update()
     {
+        if (lm.PausePanel.activeInHierarchy) { flySound.Pause(); return; }
+        else { flySound.UnPause(); }
+
         if (won)
         {
             wonSecs += Time.deltaTime;
+            lm.pauseButton.SetActive(false);
+
+            if (wonSecs > 3f)
+            {
+                flySound.Stop();
+            }
 
             if (wonSecs > 4f && !waitWon)
             {
@@ -71,6 +84,7 @@ public class level2 : MonoBehaviour
         if (lost)
         {
             lostSecs += Time.deltaTime;
+            lm.pauseButton.SetActive(false);
 
             if (!waitLost)
             {
@@ -169,7 +183,7 @@ public class level2 : MonoBehaviour
         countdown.text = "1";
         yield return new WaitForSeconds(1f);
         Destroy(countdown.gameObject);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.3f);
         timerDone = true;
 
     }
@@ -204,6 +218,8 @@ public class level2 : MonoBehaviour
         }
         fuelChosen = true;
         chooseFuelBG.SetActive(false);
+        flySound.Play();
+        ship.transform.GetChild(0).GetComponent<Animator>().enabled = true;
     }
 
     IEnumerator submitIE()

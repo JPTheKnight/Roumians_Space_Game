@@ -44,20 +44,26 @@ public class level4 : MonoBehaviour
     bool fairouz4 = false;
 
     characterMovement cm;
+    levelsManager lm;
 
     private void Start()
     {
         fade.Play("fadeOutAnim");
         cm = FindObjectOfType<characterMovement>();
+        lm = FindObjectOfType<levelsManager>();
     }
 
     void Update()
     {
-        o2LeakSound.volume = (1 - (Vector2.Distance(cm.transform.position, o2LeakSound.transform.position) + 27f)/44.151f) * 0.8f;
-        o2ElecSound.volume = (1 - (Vector2.Distance(cm.transform.position, o2ElecSound.transform.position) + 12.75f) / 25.5211f) * 0.8f;
+        if (lm.PausePanel.activeInHierarchy) { o2LeakSound.Pause(); o2ElecSound.Pause(); return; }
+        else { o2LeakSound.UnPause(); o2ElecSound.UnPause(); }
+
+        o2LeakSound.volume = ((1 - (Vector2.Distance(cm.transform.position, o2LeakSound.transform.position) + 27f)/44.151f) * 0.8f) * PlayerPrefs.GetFloat("Volume");
+        o2ElecSound.volume = ((1 - (Vector2.Distance(cm.transform.position, o2ElecSound.transform.position) + 12.75f) / 25.5211f) * 0.8f) *PlayerPrefs.GetFloat("Volume");
 
         if (lost)
         {
+            lm.pauseButton.SetActive(false);
             if (!rashLost.activeInHierarchy)
                 lostPanel.SetActive(true);
             FindObjectOfType<characterMovement>().GetComponent<Animator>().SetBool("dying", true);
@@ -358,7 +364,7 @@ public class level4 : MonoBehaviour
 
         //A: 2 and 4 |B: 1| C: 0| D: 3
 
-        if (Input.GetMouseButtonUp(0) && !lost && transform.position.x > 10.83f && !numsWinsCanvas[2].activeInHierarchy && beginLevel)
+        if (Input.GetMouseButtonUp(0) && !lost && transform.position.x > 10.83f && !numsWinsCanvas[2].activeInHierarchy && beginLevel && !rashMsg.activeInHierarchy)
         {
             RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector3.forward);
 
@@ -386,7 +392,7 @@ public class level4 : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Return) && transform.position.x > 10.83f && beginLevel)
+        if (Input.GetKeyDown(KeyCode.Return) && transform.position.x > 10.83f && beginLevel && !numsWinsCanvas[2].activeInHierarchy)
         {
             if (!A[0] && A[1] && !A[2] && A[3]
                 && B[0] && !B[1] && !B[2] && !B[3]

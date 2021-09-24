@@ -15,8 +15,11 @@ public class level1 : MonoBehaviour
     public GameObject instructionsPanel;
     bool beginLevel = false;
 
+    levelsManager lm;
+
     void Start()
     {
+        lm = FindObjectOfType<levelsManager>();
         Fade.GetComponent<Animator>().Play("fadeOutAnim");
     }
 
@@ -26,6 +29,8 @@ public class level1 : MonoBehaviour
     float waitSecs = 0;
     private void Update()
     {
+        if (lm.PausePanel.activeInHierarchy) return;
+
         if (waitSecs < 4f)
         {
             waitSecs += Time.deltaTime;
@@ -66,6 +71,7 @@ public class level1 : MonoBehaviour
             {
                 if (!objects[objectIds[i]])
                 {
+                    lm.pauseButton.SetActive(false);
                     StartCoroutine(lostPanel());
                     for (int j = 0; j < 7; j++)
                         glowImages[j].SetActive(false);
@@ -81,6 +87,7 @@ public class level1 : MonoBehaviour
 
             won = true;
             WinPanel.SetActive(true);
+            lm.pauseButton.SetActive(false);
             if (PlayerPrefs.GetInt("LevelsUnlocked") < 2)
                 PlayerPrefs.SetInt("LevelsUnlocked", 2);
             //Show next level button    
@@ -93,6 +100,7 @@ public class level1 : MonoBehaviour
         resultText.SetActive(true);
         yield return new WaitForSeconds(4f);
         resultText.SetActive(false);
+        lm.pauseButton.SetActive(true);
     }
 
 

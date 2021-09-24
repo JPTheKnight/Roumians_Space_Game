@@ -35,15 +35,19 @@ public class characterMovement : MonoBehaviour
     bool isWalking = false;
 
     level4 lvl4;
+    levelsManager lm;
     void Start()
     {
         lvl4 = FindObjectOfType<level4>();
+        lm = FindObjectOfType<levelsManager>();
     }
 
     int codeID = 0;
 
     void Update()
     {
+        if (lm.PausePanel.activeInHierarchy) { walkingSound.Pause(); doorOpen.Pause(); doorClose.Pause(); smallWin.Pause(); plantWater.Pause(); return; }
+        else { walkingSound.UnPause(); doorOpen.UnPause(); doorClose.UnPause(); smallWin.UnPause(); plantWater.UnPause(); }
 
         if (!lvl4.lost && lvl4.beginLevel && !fixedForCode)
         {
@@ -116,7 +120,7 @@ public class characterMovement : MonoBehaviour
 
         if (plantsChosen[0] || plantsChosen[1] || plantsChosen[2] || plantsChosen[3])
         {
-            if (Input.GetKeyDown(KeyCode.Return) || Input.GetMouseButtonDown(0))
+            if (Input.GetKeyDown(KeyCode.Return))
             {
                 for (int i = 0; i < plantsGlow.Length; i++)
                 {
@@ -200,16 +204,25 @@ public class characterMovement : MonoBehaviour
             else
             {
                 lvl4.lost = true;
-                lvl4.lostPanel.GetComponent<Image>().sprite = lvl4.lostMessage[1];
+                lvl4.lostPanel.GetComponent<Image>().sprite = lvl4.lostMessage[3];
             }
         }
 
         if (littleInfoWon.activeInHierarchy && Input.GetKeyDown(KeyCode.Space))
         {
             littleInfoWon.SetActive(false);
+            lm.pauseButton.SetActive(false);
             WonPanel.SetActive(true);
             if (PlayerPrefs.GetInt("LevelsUnlocked") < 5)
                 PlayerPrefs.SetInt("LevelsUnlocked", 5);
+        }
+
+        if (fairouzes[1].isPlaying)
+        {
+            if (Vector2.Distance(transform.position, fairouzes[1].transform.position) > 11f)
+            {
+                fairouzes[1].Stop();
+            }
         }
 
         if (fairouzesPlaying())

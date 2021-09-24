@@ -21,6 +21,8 @@ public class level6 : MonoBehaviour
     public GameObject instructionsPanel;
     bool beginLevel = false;
 
+    levelsManager lm;
+
     //ycoord: -4.42
     //angle: -10 10
 
@@ -32,6 +34,7 @@ public class level6 : MonoBehaviour
 
     void Start()
     {
+        lm = FindObjectOfType<levelsManager>();
         capsule.transform.Rotate(-Vector3.forward * Random.Range(-.05f, .05f));
         Fade.GetComponent<Animator>().Play("fadeOutAnim");
     }
@@ -47,6 +50,7 @@ public class level6 : MonoBehaviour
     bool shadowOn = false;
     private void Update()
     {
+
         if (won)
         {
             return;
@@ -55,6 +59,7 @@ public class level6 : MonoBehaviour
         if (lost)
         {
             lostSecs += Time.deltaTime;
+            lm.pauseButton.SetActive(false);
 
             if (!waitLost)
             {
@@ -136,6 +141,7 @@ public class level6 : MonoBehaviour
                 else
                 {
                     WonPanel.SetActive(true);
+                    lm.pauseButton.SetActive(false);
                     if (PlayerPrefs.GetInt("LevelsUnlocked") < 7)
                         PlayerPrefs.SetInt("LevelsUnlocked", 7);
                     won = true;

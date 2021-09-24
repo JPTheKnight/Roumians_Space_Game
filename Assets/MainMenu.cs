@@ -6,17 +6,29 @@ using UnityEngine.UI;
 public class MainMenu : MonoBehaviour
 {
     public GameObject[] levelButtons;
+    public Slider musicSlider, volumeSlider;
+    public AudioSource Music;
 
     int count = 0;
 
     private void Start()
     {
+        musicSlider.value = PlayerPrefs.GetFloat("Music", 1);
+        volumeSlider.value = PlayerPrefs.GetFloat("Volume", 1);
         for (int i = 1; i < PlayerPrefs.GetInt("LevelsUnlocked", 1); i++)
         {
             levelButtons[i].GetComponent<Button>().interactable = true;
             levelButtons[i].transform.GetChild(1).gameObject.SetActive(false);
         }
     }
+
+    private void Update()
+    {
+        PlayerPrefs.SetFloat("Music", musicSlider.value);
+        PlayerPrefs.SetFloat("Volume", volumeSlider.value);
+        Music.volume = PlayerPrefs.GetFloat("Music", 1);
+    }
+
     public void Next()
     {
         count++;

@@ -15,8 +15,11 @@ public class level3 : MonoBehaviour
     public GameObject instructionsPanel;
     bool beginLevel = false;
 
+    levelsManager lm;
+
     void Start()
     {
+        lm = FindObjectOfType<levelsManager>();
         Fade.GetComponent<Animator>().Play("fadeOutAnim");
     }
 
@@ -30,6 +33,8 @@ public class level3 : MonoBehaviour
 
     private void Update()
     {
+        if (lm.PausePanel.activeInHierarchy) return;
+
         if (waitSecs < maxwait)
         {
             waitSecs += Time.deltaTime;
@@ -74,7 +79,10 @@ public class level3 : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && waitSecs > 3.5f)
         {
             if (won || fail)
+            {
+                lm.pauseButton.SetActive(false);
                 return;
+            }
 
             Destroy(GameObject.FindGameObjectWithTag("Finish"));
             zRot = ((solarPanel.transform.rotation.eulerAngles.z + 540) % 360) - 180;

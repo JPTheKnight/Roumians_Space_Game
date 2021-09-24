@@ -35,13 +35,18 @@ public class characterMovementLevel5 : MonoBehaviour
     float runningTime = 10f;
 
     level5 lvl5;
+    levelsManager lm;
     void Start()
     {
+        lm = FindObjectOfType<levelsManager>();
         lvl5 = FindObjectOfType<level5>();
     }
 
     void Update()
     {
+        if (lm.PausePanel.activeInHierarchy) { walkingSound.Pause(); doorOpen.Pause(); doorClose.Pause(); smallWin.Pause(); scannerBeep.Pause(); return; }
+        else { walkingSound.UnPause(); doorOpen.UnPause(); doorClose.UnPause(); smallWin.UnPause(); scannerBeep.UnPause(); }
+
         transform.GetChild(0).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "00:" + runningTime.ToString("00");
 
         if (!lvl5.lost && lvl5.beginLevel && !scanning && !xray && !SunMsg.activeInHierarchy && !TVPanel.activeInHierarchy)
@@ -154,6 +159,7 @@ public class characterMovementLevel5 : MonoBehaviour
         {
             fairouzes[0].Stop();
             xray_result.GetComponent<Image>().sprite = xray_explanation;
+            smallWin.Play();
             xray_result.transform.GetChild(1).gameObject.SetActive(true);
             xray_result.transform.GetChild(0).gameObject.SetActive(false);
             xray = false;
@@ -403,7 +409,6 @@ public class characterMovementLevel5 : MonoBehaviour
         xray = true;
         scanning = false;
         Camera.main.GetComponent<level5>().winningThings[0] = true;
-        smallWin.Play();
         lvl5.fairouzesPlay(0);
         xray_result.SetActive(true);
         collisionSaved.enabled = true;

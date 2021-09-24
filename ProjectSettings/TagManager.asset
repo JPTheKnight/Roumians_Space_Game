@@ -23,6 +23,8 @@ TagManager:
   - Microscope
   - O2Tank
   - Doctor
+  - Volume
+  - Music
   layers:
   - Default
   - TransparentFX

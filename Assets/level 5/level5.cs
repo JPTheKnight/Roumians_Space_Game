@@ -11,7 +11,7 @@ public class level5 : MonoBehaviour
     public float playTime = 1f;
     public GameObject sunCenterRotation;
     public TextMeshProUGUI sunTimer1, sunTimer2;
-    public Sprite numberSelectedSprite;
+    public Sprite numberSelectedSprite, numberDeselectedSprite;
     public Button[] NumbersTV;
     public GameObject redRoom1, redRoom2;
     public GameObject goToPharma;
@@ -38,6 +38,8 @@ public class level5 : MonoBehaviour
     int minutes = 4;
     float seconds = 0;
 
+    levelsManager lm;
+
     //sun angles: -45.068 24.958 / 166.968 210.726
 
     bool redRoom1Anim = false, redRoom2Anim = false;
@@ -46,6 +48,7 @@ public class level5 : MonoBehaviour
 
     private void Start()
     {
+        lm = FindObjectOfType<levelsManager>();
         fade.Play("fadeOutAnim");
         timeFromSun = timeToRunFromSun;
         cml5 = FindObjectOfType<characterMovementLevel5>();
@@ -54,12 +57,18 @@ public class level5 : MonoBehaviour
     bool fairouz5 = false;
     private void Update()
     {
-        room2WarningSound.volume = (1 - (Vector2.Distance(cml5.transform.position, room2WarningSound.transform.position) + 27f) / 44.151f) * 3f;
-        room1WarningSound.volume = (1 - (Vector2.Distance(cml5.transform.position, room1WarningSound.transform.position) + 12.75f) / 25.5211f) * 3f;
+        if (lm.PausePanel.activeInHierarchy) { solarHit.Pause(); room1WarningSound.Pause(); room2WarningSound.Pause(); return; }
+        else { solarHit.UnPause(); room1WarningSound.UnPause(); room2WarningSound.UnPause(); }
+
+        room2WarningSound.volume = ((1 - (Vector2.Distance(cml5.transform.position, room2WarningSound.transform.position) + 27f) / 44.151f) * 3f) *PlayerPrefs.GetFloat("Volume");
+        room1WarningSound.volume = ((1 - (Vector2.Distance(cml5.transform.position, room1WarningSound.transform.position) + 12.75f) / 25.5211f) * 3f) *PlayerPrefs.GetFloat("Volume");
 
         if (lost)
         {
-            FindObjectOfType<characterMovementLevel5>().GetComponent<Animator>().SetBool("dying", true);
+            lm.pauseButton.SetActive(false);
+            cml5.GetComponent<Animator>().SetBool("dying", true);
+            cml5.transform.GetChild(0).gameObject.SetActive(false);
+            cml5.transform.GetChild(1).gameObject.SetActive(false);
             fade.gameObject.SetActive(true);
             fade.Play("fadeInAnim");
             waitForLost += Time.deltaTime;
@@ -115,6 +124,8 @@ public class level5 : MonoBehaviour
             {
                 StartCoroutine(redRoomAnim(redRoom2));
                 room2WarningSound.Play();
+                cml5.TVPanel.SetActive(false);
+                cml5.TV.GetComponent<Collider2D>().enabled = false;
                 redRoom2Anim = true;
             }
         }
@@ -136,6 +147,11 @@ public class level5 : MonoBehaviour
             redRoom2Anim = false;
             room1WarningSound.Stop();
             room2WarningSound.Stop();
+
+            if (!winningThings[3])
+            {
+                cml5.TV.GetComponent<Collider2D>().enabled = true;
+            }
         }
 
         if (((((sunCenterRotation.transform.rotation.eulerAngles.z + 540) % 360) - 180) < -150f || (((sunCenterRotation.transform.rotation.eulerAngles.z + 540) % 360) - 180) > 166.968f))
@@ -187,19 +203,21 @@ public class level5 : MonoBehaviour
         }
         if (!hitBySun)
         {
-            FindObjectOfType<characterMovementLevel5>().transform.GetChild(1).gameObject.SetActive(false);
+            cml5.transform.GetChild(1).gameObject.SetActive(false);
             sunTimer1.text = "";
             sunTimer2.text = "";
         }
 
-        if (numbersChosen == 3)
+        if (numbersChosen == 3 && !winningThings[3])
         {
-            FindObjectOfType<characterMovementLevel5>().TVPanel.SetActive(false);
+            cml5.TVPanel.SetActive(false);
             if (numbers[0] && !numbers[1] && !numbers[2] && numbers[3] && numbers[4] && !numbers[5] && !numbers[6] && !numbers[7]
                  && !numbers[8] && !winningThings[3])
             {
                 winningThings[3] = true;
                 cml5.smallWin.Play();
+                cml5.TV.GetComponent<Collider2D>().enabled = false;
+                cml5.fairouzes[3].Stop();
             }
             else
             {
@@ -220,6 +238,7 @@ public class level5 : MonoBehaviour
         if (fullyWon)
         {
             WonPanel.SetActive(true);
+            lm.pauseButton.SetActive(false);
             if (PlayerPrefs.GetInt("LevelsUnlocked") < 6)
                 PlayerPrefs.SetInt("LevelsUnlocked", 6);
         }
@@ -230,13 +249,13 @@ public class level5 : MonoBehaviour
         timeFromSun = timeToRunFromSun;
     }
 
-    bool[] numbers = { false, false, false, false, false, false, false, false, false };
+    public bool[] numbers = { false, false, false, false, false, false, false, false, false };
     int numbersChosen = 0;
     public void selectNumberTV(int id)
     {
         numbers[id] = !numbers[id];
-        NumbersTV[id].GetComponent<Image>().sprite = numbers[id] ? numberSelectedSprite : null;
-        numbersChosen++;
+        NumbersTV[id].GetComponent<Image>().sprite = numbers[id] ? numberSelectedSprite : numberDeselectedSprite;
+        numbersChosen = (numbers[id]) ? numbersChosen + 1 : numbersChosen - 1;
     }
 
     IEnumerator redRoomAnim(GameObject redRoom)
@@ -244,9 +263,9 @@ public class level5 : MonoBehaviour
         while(true)
         {
             redRoom.SetActive(true);
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.5f);
             redRoom.SetActive(false);
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.5f);
         }
     }
 

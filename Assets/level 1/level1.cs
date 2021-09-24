@@ -51,7 +51,7 @@ public class level1 : MonoBehaviour
 
     public void objectCheck(int id)
     {
-        if (won || !beginLevel)
+        if (won || !beginLevel || resultText.activeInHierarchy)
             return;
 
         for (int i = 0; i < 3; i++)
@@ -77,10 +77,8 @@ public class level1 : MonoBehaviour
                         glowImages[j].SetActive(false);
                     for (int j = 0; j < 3; j++)
                         objectIds[j] = -1;
-                    objectCounter = 0;
 
                     return;
-
                 }
                
             }
@@ -101,6 +99,7 @@ public class level1 : MonoBehaviour
         yield return new WaitForSeconds(4f);
         resultText.SetActive(false);
         lm.pauseButton.SetActive(true);
+        objectCounter = 0;
     }
 
 

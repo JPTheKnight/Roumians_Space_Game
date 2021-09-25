@@ -2,12 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class MainMenu : MonoBehaviour
 {
     public GameObject[] levelButtons;
     public Slider musicSlider, volumeSlider;
     public AudioSource Music;
+    public GameObject[] toDisable;
+    public GameObject LoadSlider;
+    public Slider slider;
+    public TextMeshProUGUI sliderText;
 
     int count = 0;
 
@@ -59,7 +64,28 @@ public class MainMenu : MonoBehaviour
 
     public void SendScene(int id)
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(id);
+        StartCoroutine(LoadAsync(id));
+    }
+
+    IEnumerator LoadAsync(int id)
+    {
+        AsyncOperation operation = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(id);
+
+        for (int i = 0; i < toDisable.Length; i++)
+        {
+            toDisable[i].SetActive(false);
+        }
+
+        LoadSlider.SetActive(true);
+        
+        while (!operation.isDone)
+        {
+            float progress = Mathf.Clamp01(operation.progress / .9f);
+            slider.value = progress;
+            sliderText.text = (progress * 100f).ToString("F0") + "%";
+
+            yield return null;
+        }
     }
 
     public void Quit()

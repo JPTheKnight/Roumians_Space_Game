@@ -4911,7 +4911,7 @@ MonoBehaviour:
   WonPanel: {fileID: 1493413146}
   capsuleSpeed: 1.2
   rotationSpeed: 90
-  maxZRot: 4
+  maxZRot: 6
   instructionsPanel: {fileID: 1625181006}
 --- !u!114 &2091131714
 MonoBehaviour:

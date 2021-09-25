@@ -67,6 +67,11 @@ public class MainMenu : MonoBehaviour
         StartCoroutine(LoadAsync(id));
     }
 
+    public void FullWindowedScreen()
+    {
+        Screen.fullScreen = !Screen.fullScreen;
+    }
+
     IEnumerator LoadAsync(int id)
     {
         AsyncOperation operation = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(id);

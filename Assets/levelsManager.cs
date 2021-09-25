@@ -10,6 +10,7 @@ public class levelsManager : MonoBehaviour
     public Slider musicSlider;
     public Slider volumeSlider;
     public GameObject pauseButton;
+    public Toggle fullScreen;
 
     AudioSource Music;
     float music;
@@ -51,6 +52,11 @@ public class levelsManager : MonoBehaviour
     {
         PausePanel.SetActive(false);
         Time.timeScale = 1;
+    }
+
+    public void FullWindowedScreen()
+    {
+        Screen.fullScreen = !Screen.fullScreen;
     }
 
     private void Update()

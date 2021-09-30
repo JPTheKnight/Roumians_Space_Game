@@ -215,6 +215,11 @@ public class characterMovementLevel5 : MonoBehaviour
         return false;
     }
 
+    public void fairouzMicPressed()
+    {
+        lvl5.fairouzesPlay(9);
+    }
+
     Collider2D collisionSaved, tvCollisionSaved;
     bool fairouz1 = false, fairouz3 = false, fairouz6 = false;
     private void OnTriggerEnter2D(Collider2D collision)

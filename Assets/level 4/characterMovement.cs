@@ -246,6 +246,11 @@ public class characterMovement : MonoBehaviour
         return false;
     }
 
+    public void fairouzMicPressed()
+    {
+        lvl4.fairouzesPlay(8);
+    }
+
     public void testNumbers()
     {
         smallWin.Play();

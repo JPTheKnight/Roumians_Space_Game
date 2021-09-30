@@ -442,6 +442,11 @@ public class characterMovementLevel7 : MonoBehaviour
         return false;
     }
 
+    public void fairouzMicPressed()
+    {
+        lvl7.fairouzesPlay(10);
+    }
+
     Collider2D tvCollisionSaved, radarCollisionSaved, roverCollisionSaved, microCollisionSaved, o2CollisionSaved, doctorCollisionSaved;
     bool fairouz1 = false, fairouz2 = false, fairouz3 = false;
     private void OnTriggerEnter2D(Collider2D collision)

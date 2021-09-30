@@ -315,7 +315,7 @@ public class characterMovementLevel5 : MonoBehaviour
         {
             GetComponent<Animator>().SetBool("jumping", false);
             GetComponent<Animator>().SetBool("running", true);
-            GetComponent<Rigidbody2D>().AddForce(Vector2.left * 200f * Time.deltaTime);
+            GetComponent<Rigidbody2D>().AddForce(Vector2.left * 300f * Time.deltaTime);
             fixCamera = true;
             if (runningTime > 0)
             {

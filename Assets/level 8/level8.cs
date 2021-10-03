@@ -28,7 +28,7 @@ public class level8 : MonoBehaviour
     bool pinInHand = false;
     GameObject pinHit;
     int pinCount = 0;
-    float pinTimer = 20f;
+    float pinTimer = 30f;
 
     bool fullyWon = false;
     public bool lost { get; set; }

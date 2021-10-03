@@ -39,7 +39,7 @@ public class characterMovementLevel8 : MonoBehaviour
 
     int[] lettersIndex = { 4, 1, 7, 5, 2 };
     char[] letters = { 'E', 'A', 'R', 'T', 'H' };
-    char[] weirdChars = { 'מ', 'ה', 'י', 'ט', 'פ', 'צ', 'ל', 'ס' };
+    char[] weirdChars = { 'β', 'ζ', 'η', 'ι', 'λ', 'μ', 'ξ', 'φ' };
     int curLetterID = 0;
     float TimerWait = 1f;
     void Update()
@@ -130,6 +130,7 @@ public class characterMovementLevel8 : MonoBehaviour
             tawezonCollisionSaved.transform.GetChild(0).gameObject.SetActive(false);
             tawezon = false;
             balanceText.SetActive(true);
+            GetComponent<Animator>().SetBool("rehab", true);
         }
 
         if (tawezonActivated)
@@ -144,6 +145,7 @@ public class characterMovementLevel8 : MonoBehaviour
                 lvl8.winningThings[1] = true;
                 smallWin.Play();
                 balanceText.SetActive(false);
+                GetComponent<Animator>().SetBool("rehab", false);
             }
         }
 

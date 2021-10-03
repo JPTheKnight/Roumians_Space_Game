@@ -16,6 +16,7 @@ public class levelsManager : MonoBehaviour
     float music;
     public GameObject[] audioSources;
     float[] volumes;
+    float pauseTimer = 5f;
 
     private void Start()
     {
@@ -61,7 +62,12 @@ public class levelsManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (pauseTimer > 0)
+        {
+            pauseTimer -= Time.deltaTime;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape) && pauseTimer < 0)
         {
             PausePanel.SetActive(true);
             Time.timeScale = 0;

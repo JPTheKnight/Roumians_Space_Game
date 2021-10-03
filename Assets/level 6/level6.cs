@@ -50,7 +50,6 @@ public class level6 : MonoBehaviour
     bool shadowOn = false;
     private void Update()
     {
-
         if (won)
         {
             return;

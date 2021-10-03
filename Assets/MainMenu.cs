@@ -93,6 +93,12 @@ public class MainMenu : MonoBehaviour
         }
     }
 
+    public void unlockall()
+    {
+        PlayerPrefs.SetInt("LevelsUnlocked", 8);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+    }
+
     public void Quit()
     {
         Application.Quit();

@@ -12,6 +12,8 @@ public class levelsManager : MonoBehaviour
     public GameObject pauseButton;
     public Toggle fullScreen;
 
+    bool notChange = false;
+
     AudioSource Music;
     float music;
     public GameObject[] audioSources;
@@ -20,6 +22,8 @@ public class levelsManager : MonoBehaviour
 
     private void Start()
     {
+        fullScreen.isOn = Screen.fullScreen ? true : false;
+        notChange = true;
         musicSlider.value = PlayerPrefs.GetFloat("Music", 1);
         volumeSlider.value = PlayerPrefs.GetFloat("Volume", 1);
         volumes = new float[audioSources.Length];
@@ -57,6 +61,11 @@ public class levelsManager : MonoBehaviour
 
     public void FullWindowedScreen()
     {
+        if (notChange)
+        {
+            notChange = false;
+            return;
+        }
         Screen.fullScreen = !Screen.fullScreen;
     }
 

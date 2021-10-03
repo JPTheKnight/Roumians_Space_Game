@@ -1574,9 +1574,12 @@ MonoBehaviour:
   - {fileID: 1569227469}
   - {fileID: 1251093002}
   - {fileID: 1473300020}
+  - {fileID: 51023594}
+  - {fileID: 1387646925}
   LoadSlider: {fileID: 442715771}
   slider: {fileID: 442715773}
   sliderText: {fileID: 1647470720}
+  fullscreen: {fileID: 51023596}
 --- !u!1 &525499965
 GameObject:
   m_ObjectHideFlags: 0

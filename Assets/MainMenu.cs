@@ -13,11 +13,16 @@ public class MainMenu : MonoBehaviour
     public GameObject LoadSlider;
     public Slider slider;
     public TextMeshProUGUI sliderText;
+    public Toggle fullscreen;
+
+    bool notChange = false;
 
     int count = 0;
 
     private void Start()
     {
+        fullscreen.isOn = Screen.fullScreen ? true : false;
+        notChange = true;
         musicSlider.value = PlayerPrefs.GetFloat("Music", 1);
         volumeSlider.value = PlayerPrefs.GetFloat("Volume", 1);
         for (int i = 1; i < PlayerPrefs.GetInt("LevelsUnlocked", 1); i++)
@@ -69,6 +74,11 @@ public class MainMenu : MonoBehaviour
 
     public void FullWindowedScreen()
     {
+        if (notChange)
+        {
+            notChange = false;
+            return;
+        }
         Screen.fullScreen = !Screen.fullScreen;
     }
 
